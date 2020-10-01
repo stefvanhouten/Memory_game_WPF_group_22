@@ -1,0 +1,94 @@
+﻿<Window x:Class="MemoryGame.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MemoryGame"
+        mc:Ignorable="d"
+        UseLayoutRounding="True"
+        Title="MainWindow" Height="450" Width="800" MinHeight="450" MinWidth="800" ResizeMode="CanResize">
+    <DockPanel>
+        <TabControl x:Name="TabControlNavigator"  Visibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <TabItem x:Name="TabHome" Header="Home" Visibility="Visible">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="77*"/>
+                        <ColumnDefinition Width="717*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="ButtonStartGame" Content="Play game" VerticalAlignment="Top" MinHeight="70" MinWidth="800" Margin="0,0,-6,0" Click="NavigatePreGame" Grid.ColumnSpan="2"/>
+                    <Button x:Name="ButtonSelectTheme" Content="Select theme" VerticalAlignment="Top" MinHeight="70" MinWidth="800" Margin="0,75,-6,0" Click="NavigateThemeSelection" Grid.ColumnSpan="2"/>
+                    <Button x:Name="ButtonHighScores" Content="Highscores" VerticalAlignment="Top" MinHeight="70" MinWidth="800" Click="NavigateHighScores" Margin="0,150,-6,0" Grid.ColumnSpan="2"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="TabHighScores" Header="HighScore" Visibility="Visible">
+                <Grid Background="#FFE5E5E5">
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="ButtonHomeHighScores" Grid.Column="0" Grid.Row="1" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="60"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="TabThemeSelection" Header="ThemeSelection" Visibility="Visible">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="67*"></ColumnDefinition>
+                        <ColumnDefinition Width="178*"/>
+                        <ColumnDefinition Width="541*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="ButtonHomeTheme" Grid.Column="0" Grid.Row="1" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="60" Grid.ColumnSpan="3"/>
+                </Grid>
+
+            </TabItem>
+            <TabItem x:Name="TabPreGame" Header="TabPreGame" Visibility="Visible">
+                <Grid Background="#FFE5E5E5" RenderTransformOrigin="0.503,0.555">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Player 1&#xD;&#xA;" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Width="120" Height="26"/>
+                    <TextBox x:Name="InputPlayer1" HorizontalAlignment="Left" Height="23" Margin="10,0,0,0" Grid.Column="0" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="120"/>
+                    <Label Content="Player 2&#xA;" HorizontalAlignment="Left" Margin="5,0,0,0" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top"  Width="120" Height="26"/>
+                    <TextBox x:Name="InputPlayer2" HorizontalAlignment="Left" Height="23" Margin="10,0,0,0" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="center" Width="120"/>
+                    <ComboBox x:Name="GameSizeComboBox" DropDownClosed="GameSizeSelection"  HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Column="2" Grid.Row="2" VerticalAlignment="top" Width="120"/>
+                    <CheckBox x:Name="LoadSaveGameCheckBox" Content="CheckBox" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="2" Margin="10,0,0,0" VerticalAlignment="center"/>
+                    <Button x:Name="ButtonStartMemoryGame" Grid.Column="0" Grid.Row="3" Content="Start game" VerticalAlignment="Bottom" Height="60" Click="StartMemoryGame"/>
+                    <Button x:Name="ButtonHomePreGame" Grid.Column="0" Grid.Row="4" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="60"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="TabMemoryGame" Header="Memory" Visibility="Visible">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="20"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label x:Name="LabelPlayerOneScore" Content="Label" ClipToBounds="False" HorizontalAlignment="Left" Margin="0,-6,0,0" VerticalAlignment="Top" Panel.ZIndex="1000" />
+                    <Label x:Name="LabelPlayerTwoScore" Content="Label" ClipToBounds="False" HorizontalAlignment="Left"  VerticalAlignment="Top" Panel.ZIndex="1000" Margin="738,-6,0,0"/>
+                    <Label x:Name="LabelCurrentPlayer" Content="Label" ClipToBounds="False" HorizontalAlignment="Left"  VerticalAlignment="Top" Panel.ZIndex="1000" Margin="363,-6,0,0" />
+                    <Grid x:Name="MemoryGrid" Grid.Row="1" Background="#FFE5E5E5"></Grid>
+                    <Button Content="Pause" HorizontalAlignment="Left" Grid.Row="2"  VerticalAlignment="Top" Width="75"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
