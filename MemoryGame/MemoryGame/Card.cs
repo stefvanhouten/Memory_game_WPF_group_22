@@ -11,7 +11,6 @@ namespace MemoryGame
         public bool IsSolved { get; set; } = false;
         public bool HasBeenVisible { get; set; } = false;
         public Bitmap CardImage { get; set; } //Custom bitmap to store the image in. PictureBox.Image cant be hidden without losing the image
-        public Bitmap Image { get; set; }
     }
 
     class CardPictureBoxJson

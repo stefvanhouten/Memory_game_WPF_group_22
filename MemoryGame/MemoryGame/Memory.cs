@@ -189,9 +189,14 @@ namespace MemoryGame
                 this.Rows = (int)gameState.Rows;
                 this.Collumns = (int)gameState.Collumns;
                 this.Players = gameState.Players.ToObject<List<Player>>().ToArray(); //Seems dirty 
+                this.Form1.Dispatcher.Invoke(() =>
+                {
+                    this.Form1.LabelPlayerOneScore.Content = $"{this.Players[0].Name} : {this.Players[0].ScoreBoard.Score}";
+                    this.Form1.LabelPlayerTwoScore.Content = $"{this.Players[1].Name} : {this.Players[1].ScoreBoard.Score}";
+                    this.Form1.LabelCurrentPlayer.Content = !this.IsPlayerOnesTurn ? $"Current player: {this.Players[0].Name}" : $"Current player: {this.Players[1].Name}";
+                });
                 //It is important that we style our deck after we loaded in all the settings, otherwise we get a default 4*4 playing field
                 //even though the settings may state otherwise
-                //this.ConfigurateDeckStyling();
                 List<CardPictureBoxJson> deck = new List<CardPictureBoxJson>();
                 deck = gameState.Deck.ToObject<List<CardPictureBoxJson>>();
 
@@ -205,26 +210,19 @@ namespace MemoryGame
                         HasBeenVisible = jsonCard.HasBeenVisible,
                         PairName = pairNameAndImage.Name,
                         CardImage = pairNameAndImage.Resource,
-                        Image = (jsonCard.IsSolved) ? pairNameAndImage.Resource : null //Show image based on if it was solved 
                     };
-                    //card.Click += this.CardClicked;
                     //Check if the card is currently selected, if so add it to the selectedCards list.
                     if (jsonCard.IsSelected)
                     {
                         this.SelectedCards.Add(card);
-                        card.Image = pairNameAndImage.Resource;
                     }
                     this.Deck.Add(card);
                 }
-                foreach (Card card in this.Deck)
-                {
-                    //this.Panel.Controls.Add(card);
-                }
             }
             //Remove the savegame from the savefile to prevent abuse
+            this.Form1.GeneratePlayingField();
             this.SaveGameFile.WriteToFile("", overwrite: true);
             this.HasUnfinishedGame = false;
-            this.Form1.ShowLoadGameCheckbox();
             //Pass back control to the player
             this.GameIsFrozen = false;
         }
@@ -347,12 +345,10 @@ namespace MemoryGame
             {
                 //Show the image that we stored in CardImage
                 var imageSource = this.BitmapToImageSource(selectedCard.CardImage);
-                var border = new Border();
                 var image = new System.Windows.Controls.Image();
-                border.Child = image;
                 image.Source = imageSource;
                 image.Stretch = Stretch.Fill;
-                button.Content = border;
+                button.Content = image;
                 this.SelectedCards.Add(button);
             }
 
@@ -369,7 +365,7 @@ namespace MemoryGame
             }
         }
 
-        BitmapImage BitmapToImageSource(Bitmap bitmap)
+        public BitmapImage BitmapToImageSource(Bitmap bitmap)
         {
             using (MemoryStream memory = new MemoryStream())
             {

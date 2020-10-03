@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -40,7 +41,14 @@ namespace MemoryGame
 
         public void ShowLoadGameCheckbox()
         {
-
+            if (this.game.HasUnfinishedGame)
+            {
+                this.LoadSaveGameCheckBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                this.LoadSaveGameCheckBox.Visibility = Visibility.Hidden;
+            }
         }
 
         public void ClearPanels()
@@ -52,16 +60,6 @@ namespace MemoryGame
         public void UpdateHighScoresTable()
         {
 
-        }
-
-        public void UpdateCurrentPlayer(string currentPlayer)
-        {
-
-        }
-
-        public void UpdateScore(string playerOneLabel, string playerTwoLabel)
-        {
-            
         }
 
         /// <summary>
@@ -120,9 +118,13 @@ namespace MemoryGame
             TabMemoryGame.IsSelected = true;
         }
 
-     
+        public void LoadSavedGame(object sender, EventArgs e)
+        {
+            this.game.ResumeGame(loadFromSaveFile: true);
+            TabMemoryGame.IsSelected = true;
+        }
 
-        private void GeneratePlayingField()
+        public void GeneratePlayingField()
         {
             for (int i = 0; i < this.game.Rows; i++)
             {
@@ -140,12 +142,16 @@ namespace MemoryGame
                 for (int x = 0; x < this.game.Collumns; x++)
                 {
                     Card cardBtn = this.game.Deck[index];
-                    var border = new Border();
                     var image = new System.Windows.Controls.Image();
+                    if (cardBtn.IsSolved || this.game.SelectedCards.Contains(cardBtn))
+                    {
+                        int position = this.game.ThemeImages[this.game.SelectedTheme].FindIndex(c => c.Name == cardBtn.PairName);
+                        var imageSource = this.game.BitmapToImageSource(this.game.ThemeImages[this.game.SelectedTheme][position].Resource);
+                        image.Source = imageSource;
+                    }
 
-                    border.Child = image;
                     image.Stretch = Stretch.Fill;
-                    cardBtn.Content = border;
+                    cardBtn.Content = image;
                     cardBtn.Name = $"b{index}";
                     cardBtn.Click += new RoutedEventHandler(this.game.CardClicked);
 
@@ -157,27 +163,20 @@ namespace MemoryGame
             }
         }
 
-        //public void CardClicked(object sender, EventArgs e)
-        //{
-        //    Button test = (Button)sender;
-        //    Card clickedCard = this.game.Deck[Convert.ToInt32(test.Name.Substring(1))];
+        public void PauseResumeMemory(object sender, RoutedEventArgs e)
+        {
+            if(this.PauseResumeBtn.Content.ToString().Contains("Pause"))
+            {
+                this.game.PauseGame();
+                this.PauseResumeBtn.Content = "Resume";
+            }
+            else
+            {
+                this.game.ResumeGame();
+                this.PauseResumeBtn.Content = "Pause";
+            }
+        }
 
-        //    if (this.game.GameIsFrozen || this.game.SelectedCards.Contains(clickedCard) || clickedCard.IsSolved)
-        //    {
-        //        return;
-        //    }
-        //    else
-        //    {
-        //        var imageSource = this.BitmapToImageSource(clickedCard.CardImage);
-        //        var border = new Border();
-        //        var image = new System.Windows.Controls.Image();
-        //        border.Child = image;
-        //        image.Source = imageSource;
-        //        image.Stretch = Stretch.Fill;
-        //        test.Content = border;
-        //        this.game.SelectedCards.Add(clickedCard);
-        //    }
-        //}
         /// <summary>
         /// Handles behaviour for themeselection. Forces one theme to be selected. 
         /// </summary>
@@ -198,6 +197,7 @@ namespace MemoryGame
 
         public void NavigatePreGame(object sender, EventArgs e)
         {
+            this.ShowLoadGameCheckbox();
             this.GenerateGameSizeDropDownOptions();
             TabPreGame.IsSelected = true;
         }
