@@ -32,7 +32,7 @@ namespace MemoryGame
     /// </summary>
     class HighScore
     {
-        public ObservableCollection<HighScoreListing> highScores { get; set; }
+        public List<HighScoreListing> highScores { get; set; }
         public Files HighScorePath { get; private set; } = new Files(Path.Combine(Directory.GetCurrentDirectory(), "highscores.txt"));
         public HighScore()
         {
@@ -61,7 +61,7 @@ namespace MemoryGame
              *    sorts out the top (x) highest scoring games!
              *    
              */
-            this.highScores = new ObservableCollection<HighScoreListing>();
+            this.highScores = new List<HighScoreListing>();
         }
 
         public void AddToHighScores(Player player)

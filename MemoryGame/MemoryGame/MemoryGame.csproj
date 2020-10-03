@@ -101,6 +101,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="images\LOTR\lotr.webp" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -133,6 +134,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ring.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\frontside.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\lotr.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

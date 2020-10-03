@@ -12,19 +12,16 @@ using System.Windows.Media.Imaging;
 
 namespace MemoryGame
 {
-
- 
     /// <summary>
-    /// Base class for the Memory game. 
+    /// Base class for the Memory game.
     /// </summary>
     internal class Memory
     {
-        public bool GameIsFrozen { get; private set; } = false;
         private bool IsPlayerOnesTurn { get; set; } = true;
         private readonly Files SaveGameFile = new Files(Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt"));
 
         //Probably need to look for a way to dynamicly do this
-        public Dictionary<int, List<CardNameAndImage>> ThemeImages { get; set; } = new Dictionary<int, List<CardNameAndImage>>()
+        public readonly Dictionary<int, List<CardNameAndImage>> ThemeImages = new Dictionary<int, List<CardNameAndImage>>()
         {
             { 0, new List<CardNameAndImage>()
                 {
@@ -66,18 +63,24 @@ namespace MemoryGame
                     new CardNameAndImage() { Name = "Smeegle", Resource = Resources.Smeegle },
                 }
             },
-
         };
-        public List<Card> Deck { get; private set; }
+        public readonly Dictionary<int, Bitmap> CardFrontSide = new Dictionary<int, Bitmap>()
+        {
+            { 0,  Resources.frontside },
+            { 1,  Resources.lotr },
+        };
+
+        public readonly Dictionary<int, Bitmap> BackgroundTheme = new Dictionary<int, Bitmap>()
+        {
+            { 0,  Resources.frontside },
+            { 1,  Resources.lotr },
+        };
+
+        public bool GameIsFrozen { get; private set; } = false;
         public bool HasUnfinishedGame { get; private set; } = false;
-        public int SelectedTheme { get; set; } = 0;
-        public HighScore HighScores { get; private set; }
-        public int Rows { get; set; } = 4;
-        public int Collumns { get; set; } = 4;
-        public Player[] Players { get; private set; } = new Player[2];
+
+        public List<Card> Deck { get; private set; }
         public List<Card> SelectedCards { get; private set; } //Holds 2 cards that currently are selected
-        public Grid Panel { get; private set; }
-        public MainWindow Form1 { get; private set; }
         public List<KeyValuePair<int, string>> Theme { get; private set; } = new List<KeyValuePair<int, string>>();
         public List<GameOptions> GameOptions { get; private set; } = new List<GameOptions>() {
             new GameOptions { Name = "Classic 4x4", Rows = 4, Columns = 4 },
@@ -85,6 +88,16 @@ namespace MemoryGame
             new GameOptions { Name = "Medium 4x5", Rows = 4, Columns = 5 },
             new GameOptions { Name = "Hard 5x6", Rows = 5, Columns = 6 },
         };
+
+        public HighScore HighScores { get; private set; }
+        public Player[] Players { get; private set; } = new Player[2];
+        public Grid Panel { get; private set; }
+        public MainWindow Form1 { get; private set; }
+
+        public int SelectedTheme { get; set; } = 0;
+        public int Rows { get; set; } = 4;
+        public int Collumns { get; set; } = 4;
+
 
         public Memory(Grid panel, MainWindow form1)
         {
@@ -121,6 +134,7 @@ namespace MemoryGame
         {
             return this.ThemeImages[this.SelectedTheme].Count;
         }
+
         /// <summary>
         /// Ends the current memory game and redirects to highscores page.
         /// Calls the HighScores.AddToHighScores method to add the previously played game to the highscores
@@ -131,9 +145,11 @@ namespace MemoryGame
             {
                 this.HighScores.AddToHighScores(player);
             }
-
+            Array.Clear(this.Players, 0, this.Players.Length);
             this.Form1.Dispatcher.Invoke(() =>
             {
+                this.Form1.InputPlayer1.Text = "";
+                this.Form1.InputPlayer2.Text = "";
                 this.Form1.NavigateToHighScores();
                 this.Form1.ClearPanels();
             });
@@ -148,11 +164,12 @@ namespace MemoryGame
 
             foreach (Card card in this.Deck)
             {
-                jsonConvertableDeck.Add(new CardPictureBoxJson() { 
-                    Name = card.Name, 
-                    IsSolved = card.IsSolved, 
-                    PairName = card.PairName, 
-                    HasBeenVisible = card.HasBeenVisible ,
+                jsonConvertableDeck.Add(new CardPictureBoxJson()
+                {
+                    Name = card.Name,
+                    IsSolved = card.IsSolved,
+                    PairName = card.PairName,
+                    HasBeenVisible = card.HasBeenVisible,
                     IsSelected = this.SelectedCards.Any(c => c.Name == card.Name)
                 });
             }
@@ -170,7 +187,7 @@ namespace MemoryGame
 
         /// <summary>
         /// Resumes paused game. If it needs to resume game from savefile load file contents back into the memory class
-        /// and rebuild the deck. 
+        /// and rebuild the deck.
         /// </summary>
         /// <param name="loadFromSaveFile"></param>
         public void ResumeGame(bool loadFromSaveFile = false)
@@ -192,7 +209,7 @@ namespace MemoryGame
                 this.SelectedTheme = (int)gameState.SelectedTheme;
                 this.Rows = (int)gameState.Rows;
                 this.Collumns = (int)gameState.Collumns;
-                this.Players = gameState.Players.ToObject<List<Player>>().ToArray(); //Seems dirty 
+                this.Players = gameState.Players.ToObject<List<Player>>().ToArray(); //Seems dirty
                 this.Form1.Dispatcher.Invoke(() =>
                 {
                     this.Form1.LabelPlayerOneScore.Content = $"{this.Players[0].Name} : {this.Players[0].ScoreBoard.Score}";
@@ -233,13 +250,13 @@ namespace MemoryGame
 
         /// <summary>
         /// Generates the amount of cards needed based on this.Colums and this.Rows.
-        /// Cards get assigned images based on the currently selected theme. 
-        /// Also handles randomizing the deck each time a game is played. 
+        /// Cards get assigned images based on the currently selected theme.
+        /// Also handles randomizing the deck each time a game is played.
         /// </summary>
         private void PopulateDeck()
         {
             //this.ConfigurateDeckStyling();
-            this.Deck = new List<Card>(); 
+            this.Deck = new List<Card>();
             this.SelectedCards = new List<Card>();
 
             for (int i = 0; i < (this.Rows * this.Collumns); i++)
@@ -250,16 +267,15 @@ namespace MemoryGame
                     PairName = this.ThemeImages[this.SelectedTheme][i].Name,
                     CardImage = this.ThemeImages[this.SelectedTheme][i].Resource
                 };
-               
+
                 this.Deck.Add(card);
             }
             //Randomize the location of the cards in the deck
             this.Deck.Shuffle();
-            this.Deck.Shuffle();
         }
 
         /// <summary>
-        /// This method check if the selected card in SelectedCards list are a match. 
+        /// This method check if the selected card in SelectedCards list are a match.
         /// If it is a match flip a boolean in the PictureBox so that we know this card has previously been solved.
         /// Also calls the ScoreBoard.Add method to increment the score of the player that is currently playing.
         /// We keep track of the current player with the this.IsPlayerOnesTurn bool. After a player turned two cards
@@ -271,10 +287,10 @@ namespace MemoryGame
             if (this.SelectedCards[0].PairName == this.SelectedCards[1].PairName)
             {
                 foreach (Card card in this.SelectedCards)
-	            {
+                {
                     //When we have a matching pair mark them as solved to take them out of the game
                     card.IsSolved = true;
-	            }
+                }
                 //Increment the score based on which player was playing
                 if (this.IsPlayerOnesTurn)
                     this.Players[0].ScoreBoard.IncreaseScore();
@@ -285,7 +301,7 @@ namespace MemoryGame
             {
                 //If there was no match and the card has previously been turned we want to punish the player
                 //Check if any of the Cards in the this.SelectedCards list have the boolean HasBeenVisible flipped
-                if(this.SelectedCards.FindIndex(c => c.HasBeenVisible == true) >= 0)
+                if (this.SelectedCards.FindIndex(c => c.HasBeenVisible == true) >= 0)
                 {
                     if (this.IsPlayerOnesTurn)
                         this.Players[0].ScoreBoard.DecreaseScore();
@@ -298,7 +314,11 @@ namespace MemoryGame
                     //Reset the cards to show no image and set the property to ensure that we know the card has been flipped before
                     card.Dispatcher.Invoke(() =>
                     {
-                        card.Content = null;
+                        var imageSource = this.BitmapToImageSource(this.CardFrontSide[this.SelectedTheme]);
+                        var image = new System.Windows.Controls.Image();
+                        image.Source = imageSource;
+                        image.Stretch = Stretch.Fill;
+                        card.Content = image;
                     });
                     card.HasBeenVisible = true;
                 }
@@ -311,7 +331,7 @@ namespace MemoryGame
                 this.Form1.LabelPlayerTwoScore.Content = $"{this.Players[1].Name} : {this.Players[1].ScoreBoard.Score}";
                 this.Form1.LabelCurrentPlayer.Content = !this.IsPlayerOnesTurn ? $"Current player: {this.Players[0].Name}" : $"Current player: {this.Players[1].Name}";
             });
-         
+
             this.IsPlayerOnesTurn = !this.IsPlayerOnesTurn;
             this.SelectedCards.Clear();
             this.GameIsFrozen = false;
@@ -327,11 +347,11 @@ namespace MemoryGame
         /// First we have to run a couple checks to determine if we can proceed;
         /// - We need to check if the game is frozen, this happends after clicking on a card. We need to freeze the game
         ///   because if we do not do so the player has no time to see the second card he tried to match with the first.
-        ///   So when we do not freeze the game the player has a (300)ms window to click other cards and mess up what is happenin
+        ///   So when we do not freeze the game the player has a (200)ms window to click other cards and mess up what is happenin
         /// - Check if the currently clicked card is already in the this.SelectedCards list, we do not want a user to be able
         ///   to gain points for matching the card with the card he just clicked.
-        /// - If a card is solved we do not want to be able to gain points for that either. 
-        /// 
+        /// - If a card is solved we do not want to be able to gain points for that either.
+        ///
         /// When we have two cards in the this.SelectedCards list we want to proceed and check if they match.
         /// </summary>
         /// <param name="sender"></param>
@@ -360,9 +380,9 @@ namespace MemoryGame
             if (this.SelectedCards.Count == 2)
             {
                 this.GameIsFrozen = true;
-                //Delay checking if they match with (300)ms. This is so that the user has a few ms to see what image they flipped
+                //Delay checking if they match with (200)ms. This is so that the user has a few ms to see what image they flipped
                 //when they do not match. Without this its pretty much instant and the user wont be able to see what card they matched
-                Task.Delay(300).ContinueWith(x =>
+                Task.Delay(200).ContinueWith(x =>
                 {
                     this.CheckIfMatch();
                 });

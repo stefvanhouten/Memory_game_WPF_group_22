@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -23,16 +24,25 @@ namespace MemoryGame
         {
             InitializeComponent();
             this.game = new Memory(MemoryGrid, this);
+            this.RenderBackgroundForTabs();
             this.GenerateThemeSelectionCheckboxes();
         }
 
         private void GenerateThemeSelectionCheckboxes()
         {
+            int totalChildren = this.ThemeGrid.Children.Count;
+            for (int x = 0; x < totalChildren - 1; x++)
+            {
+                if(this.ThemeGrid.Children[x].GetType() == typeof(CheckBox))
+                {
+                    this.ThemeGrid.Children.Remove(this.ThemeGrid.Children[x]);
+                }
+            }
             int i = 0;
             foreach (KeyValuePair<int, string> theme in this.game.Theme)
             {
                 CheckBox checkBox = new CheckBox();
-                if (i == 0)
+                if (i == this.game.SelectedTheme)
                 {
                     checkBox.IsChecked = true;
                     this.lastChecked = checkBox;
@@ -64,7 +74,21 @@ namespace MemoryGame
             lastChecked = (bool)activeCheckBox.IsChecked ? activeCheckBox : null;
             //Set the currently selected theme
             this.game.SelectedTheme = Convert.ToInt32(activeCheckBox.Name.Substring(1));
+            this.RenderBackgroundForTabs();
+           
             //Re-generate the options that are displayed in the pre game view based on selected theme. 
+        }
+
+        private void RenderBackgroundForTabs()
+        {
+            ImageBrush background = new ImageBrush();
+            background.ImageSource = this.game.BitmapToImageSource(this.game.BackgroundTheme[this.game.SelectedTheme]);
+            background.Opacity = 0.3;
+            this.HomeGrid.Background = background;
+            this.ThemeGrid.Background = background;
+            this.MemoryGrid.Background = background;
+            this.PreGameGrid.Background = background;
+            this.HighScoresDataGrid.Background = background;
         }
 
         public void ShowLoadGameCheckbox()
@@ -84,24 +108,6 @@ namespace MemoryGame
             this.MemoryGrid.RowDefinitions.Clear();
             this.MemoryGrid.ColumnDefinitions.Clear();
         }
-
-        /// <summary>
-        /// Populate the dropdown menu with available gamesizes. 
-        /// </summary>
-        private void GenerateGameSizeDropDownOptions()
-        {
-            this.GameSizeComboBox.Items.Clear();
-            int totalCards = this.game.TotalCardsInCurrentTheme();
-            foreach (GameOptions item in this.game.GameOptions)
-            {
-                if (totalCards >= item.CardsRequired)
-                {
-                    this.GameSizeComboBox.Items.Add(item);
-                }
-            }
-            this.GameSizeComboBox.SelectedIndex = 0;
-        }
-
 
         /// <summary>
         /// Validates that two player names have been provided. 
@@ -141,6 +147,8 @@ namespace MemoryGame
         public void LoadSavedGame(object sender, EventArgs e)
         {
             this.game.ResumeGame(loadFromSaveFile: true);
+            this.RenderBackgroundForTabs();
+            this.GenerateThemeSelectionCheckboxes();
             TabMemoryGame.IsSelected = true;
         }
 
@@ -163,6 +171,8 @@ namespace MemoryGame
                 {
                     Card cardBtn = this.game.Deck[index];
                     var image = new System.Windows.Controls.Image();
+                    image.Stretch = Stretch.Fill;
+                    image.Source = this.game.BitmapToImageSource(this.game.CardFrontSide[this.game.SelectedTheme]);
                     if (cardBtn.IsSolved || this.game.SelectedCards.Contains(cardBtn))
                     {
                         int position = this.game.ThemeImages[this.game.SelectedTheme].FindIndex(c => c.Name == cardBtn.PairName);
@@ -170,7 +180,6 @@ namespace MemoryGame
                         image.Source = imageSource;
                     }
 
-                    image.Stretch = Stretch.Fill;
                     cardBtn.Content = image;
                     cardBtn.Name = $"b{index}";
                     cardBtn.Click += new RoutedEventHandler(this.game.CardClicked);
@@ -195,6 +204,27 @@ namespace MemoryGame
                 this.game.ResumeGame();
                 this.PauseResumeBtn.Content = "Pause";
             }
+        }
+
+
+        /// <summary>
+        /// Populate the dropdown menu with available gamesizes. 
+        /// </summary>
+        private void GenerateGameSizeDropDownOptions()
+        {
+            this.GameSizeComboBox.Items.Clear();
+            int totalCards = this.game.TotalCardsInCurrentTheme();
+            foreach (GameOptions item in this.game.GameOptions)
+            {
+                if (totalCards >= item.CardsRequired)
+                {
+                    this.GameSizeComboBox.Items.Add(item);
+                }
+            }
+            this.GameSizeComboBox.SelectedIndex = 0;
+            GameOptions options = (GameOptions)this.GameSizeComboBox.SelectedItem;
+            this.game.Rows = options.Rows;
+            this.game.Collumns = options.Columns;
         }
 
         /// <summary>
@@ -224,7 +254,12 @@ namespace MemoryGame
 
         public void NavigateToHighScores()
         {
-            this.HighScoresDataGrid.ItemsSource = this.game.HighScores.highScores;
+            ObservableCollection<HighScoreListing> oc = new ObservableCollection<HighScoreListing>();
+            foreach (HighScoreListing item in this.game.HighScores.highScores)
+            {
+                oc.Add(item);
+            }
+            this.HighScoresDataGrid.ItemsSource = oc;
             TabHighScores.IsSelected = true;
         }
 

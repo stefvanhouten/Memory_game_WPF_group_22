@@ -10,19 +10,25 @@
     <DockPanel>
         <TabControl x:Name="TabControlNavigator"  Visibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
             <TabItem x:Name="TabHome" Header="Home" Visibility="Collapsed">
-                <Grid Background="#FFE5E5E5">
+                <Grid x:Name="HomeGrid">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="77*"/>
-                        <ColumnDefinition Width="717*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="ButtonStartGame" Content="Play game" VerticalAlignment="Top" MinHeight="70" MinWidth="800" Margin="0,0,-6,0" Click="NavigatePreGame" Grid.ColumnSpan="2"/>
-                    <Button x:Name="ButtonSelectTheme" Content="Select theme" VerticalAlignment="Top" MinHeight="70" MinWidth="800" Margin="0,75,-6,0" Click="NavigateThemeSelection" Grid.ColumnSpan="2"/>
-                    <Button x:Name="ButtonHighScores" Content="Highscores" VerticalAlignment="Top" MinHeight="70" MinWidth="800" Click="NavigateHighScores" Margin="0,150,-6,0" Grid.ColumnSpan="2"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button x:Name="ButtonStartGame" Content="Play game" VerticalAlignment="Stretch" Margin="0, 5, 0, 0" Grid.Column="1" Grid.Row="0"    Click="NavigatePreGame"/>
+                    <Button x:Name="ButtonSelectTheme" Content="Select theme" VerticalAlignment="Stretch" Margin="0, 5, 0, 0" Grid.Column="1" Grid.Row="1"   Click="NavigateThemeSelection"/>
+                    <Button x:Name="ButtonHighScores" Content="Highscores" VerticalAlignment="Stretch" Margin="0, 5, 0, 0"  Grid.Column="1"  Grid.Row="2"   Click="NavigateHighScores"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabHighScores" Header="HighScore" Visibility="Collapsed">
                 <Grid Background="#FFE5E5E5">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
@@ -35,12 +41,12 @@
                                 <DataGridTextColumn Header="Score" Width="*" Binding="{Binding Path=Score}"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Button x:Name="ButtonHomeHighScores" Grid.Column="0" Grid.Row="1" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="60"/>
+                        <Button x:Name="ButtonHomeHighScores" Grid.Column="0" Grid.Row="1" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="30"/>
                     </Grid>
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabThemeSelection" Header="ThemeSelection" Visibility="Collapsed">
-                <Grid x:Name="ThemeGrid" Background="#FFE5E5E5">
+                <Grid x:Name="ThemeGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
@@ -48,31 +54,31 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="ButtonHomeTheme" Grid.Column="0" Grid.Row="1" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="60" Grid.ColumnSpan="3"/>
+                    <Button x:Name="ButtonHomeTheme" Grid.Column="0" Grid.Row="1" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="30"/>
                     <Label Content="Select theme&#xD;&#xA;" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" FontWeight="Bold" FontSize="18" Height="30"/>
                 </Grid>
 
             </TabItem>
             <TabItem x:Name="TabPreGame" Header="TabPreGame" Visibility="Collapsed">
-                <Grid Background="#FFE5E5E5" RenderTransformOrigin="0.503,0.555">
+                <Grid x:Name="PreGameGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70"></RowDefinition>
                         <RowDefinition Height="70"></RowDefinition>
                         <RowDefinition Height="70"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="125"></RowDefinition>
+                        <RowDefinition Height="65"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Player 1&#xD;&#xA;" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Width="120" Height="26"/>
+                    <Label Content="Player 1&#xD;&#xA;" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Width="120" Height="26" />
                     <TextBox x:Name="InputPlayer1" HorizontalAlignment="Left" Height="23" Margin="10,0,0,0" Grid.Column="0" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="200"/>
                     <Label Content="Player 2&#xA;" HorizontalAlignment="Left" Margin="5,0,0,0" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top"  Width="120" Height="26"/>
                     <TextBox x:Name="InputPlayer2" HorizontalAlignment="Left" Height="23" Margin="10,0,0,0" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="center" Width="200"/>
                     <ComboBox x:Name="GameSizeComboBox" DropDownClosed="GameSizeSelection"  HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Column="2" Grid.Row="2" VerticalAlignment="top" Width="120"/>
-                    <CheckBox x:Name="LoadSaveGameCheckBox" Content="Load saved game" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="2" Margin="10,0,0,0" VerticalAlignment="center" Click="LoadSavedGame"/>
-                    <Button x:Name="ButtonStartMemoryGame" Grid.Column="0" Grid.Row="4" Content="Start game" VerticalAlignment="top" Height="60" Click="StartMemoryGame"/>
-                    <Button x:Name="ButtonHomePreGame" Grid.Column="0" Grid.Row="4" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="60"/>
+                    <CheckBox x:Name="LoadSaveGameCheckBox" Content="Load saved game" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="2" Margin="10,0,0,0" VerticalAlignment="center" Click="LoadSavedGame" Background="White"/>
+                    <Button x:Name="ButtonStartMemoryGame" Grid.Column="0" Grid.Row="4" Content="Start game" VerticalAlignment="top" Height="30" Click="StartMemoryGame"/>
+                    <Button x:Name="ButtonHomePreGame" Grid.Column="0" Grid.Row="4" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="30"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabMemoryGame" Header="Memory" Visibility="Collapsed">

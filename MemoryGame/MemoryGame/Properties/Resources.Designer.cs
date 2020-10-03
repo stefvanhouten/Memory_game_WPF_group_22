@@ -133,9 +133,29 @@ namespace MemoryGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap frontside {
+            get {
+                object obj = ResourceManager.GetObject("frontside", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Gandalf {
             get {
                 object obj = ResourceManager.GetObject("Gandalf", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap lotr {
+            get {
+                object obj = ResourceManager.GetObject("lotr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
