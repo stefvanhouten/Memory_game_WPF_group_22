@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -16,27 +17,54 @@ namespace MemoryGame
     public partial class MainWindow : Window
     {
         private CheckBox lastChecked;
-
-        /*  We use delegates to update Form1 from another Thread. 
-         *  C# won't allow the UI thread to be update from another thread, for instance from our Memory game class. 
-         *  
-         *  To bypass this we create a delegate. When we call one of our delegates we do an invokeRequired check,
-         *  all this does is it validates if the method was called from another thread. If so we invoke our delegate 
-         *  which then handles whatever it is we want to do. 
-         */
-        public delegate void SetPlayerScoreCallback(string playerOneLabel, string playerTwoLabel);
-        public delegate void SetCurrentPlayerCallback(string currentPlayer);
-        public delegate void RedirectToHighScoresCallback();
-        public delegate void ClearPanelsCallback();
-        public delegate void ShowLoadSaveGameCallback();
-        public delegate void UpdateHighScoresTableCallback();
-
         readonly Memory game;
 
         public MainWindow()
         {
             InitializeComponent();
             this.game = new Memory(MemoryGrid, this);
+            this.GenerateThemeSelectionCheckboxes();
+        }
+
+        private void GenerateThemeSelectionCheckboxes()
+        {
+            int i = 0;
+            foreach (KeyValuePair<int, string> theme in this.game.Theme)
+            {
+                CheckBox checkBox = new CheckBox();
+                if (i == 0)
+                {
+                    checkBox.IsChecked = true;
+                    this.lastChecked = checkBox;
+                }
+                checkBox.Name = $"b{theme.Key}";
+                checkBox.Content = theme.Value;
+                checkBox.Margin = new Thickness(5, 40 + i * 20, 0, 0);
+                checkBox.Click += CheckBox_Click;
+                ThemeGrid.Children.Add(checkBox);
+                Grid.SetRow(checkBox, 0);
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// Handles behaviour for themeselection. Forces one theme to be selected. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckBox_Click(object sender, EventArgs e)
+        {
+            CheckBox activeCheckBox = sender as CheckBox;
+            //Handle toggling behaviour in the checkboxes. Don't allow unselecting only active checkbox
+            if (activeCheckBox != lastChecked && lastChecked != null)
+                this.lastChecked.IsChecked = false;
+            else
+                this.lastChecked.IsChecked = true;
+
+            lastChecked = (bool)activeCheckBox.IsChecked ? activeCheckBox : null;
+            //Set the currently selected theme
+            this.game.SelectedTheme = Convert.ToInt32(activeCheckBox.Name.Substring(1));
+            //Re-generate the options that are displayed in the pre game view based on selected theme. 
         }
 
         public void ShowLoadGameCheckbox()
@@ -55,11 +83,6 @@ namespace MemoryGame
         {
             this.MemoryGrid.RowDefinitions.Clear();
             this.MemoryGrid.ColumnDefinitions.Clear();
-        }
-
-        public void UpdateHighScoresTable()
-        {
-
         }
 
         /// <summary>
@@ -106,10 +129,7 @@ namespace MemoryGame
                 MessageBox.Show("Player names cannot be the same!", "Input error");
                 return;
             }
-
-            //Should probably make a method for adding new players to the game. This can be exploited
-            this.game.Players[0] = new Player(playerOne);
-            this.game.Players[1] = new Player(playerTwo);
+            this.game.AddPlayers(playerOne, playerTwo);
             LabelPlayerOneScore.Content = $"{this.game.Players[0].Name} : {this.game.Players[0].ScoreBoard.Score}";
             LabelPlayerTwoScore.Content = $"{this.game.Players[1].Name} : {this.game.Players[1].ScoreBoard.Score}";
             LabelCurrentPlayer.Content = $"Current player: {this.game.Players[0].Name}";
@@ -204,6 +224,7 @@ namespace MemoryGame
 
         public void NavigateToHighScores()
         {
+            this.HighScoresDataGrid.ItemsSource = this.game.HighScores.highScores;
             TabHighScores.IsSelected = true;
         }
 

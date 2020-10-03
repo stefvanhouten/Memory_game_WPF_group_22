@@ -22,6 +22,7 @@ namespace MemoryGame
         public bool GameIsFrozen { get; private set; } = false;
         private bool IsPlayerOnesTurn { get; set; } = true;
         private readonly Files SaveGameFile = new Files(Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt"));
+
         //Probably need to look for a way to dynamicly do this
         public Dictionary<int, List<CardNameAndImage>> ThemeImages { get; set; } = new Dictionary<int, List<CardNameAndImage>>()
         {
@@ -67,9 +68,8 @@ namespace MemoryGame
             },
 
         };
-
         public List<Card> Deck { get; private set; }
-        public bool HasUnfinishedGame { get; set; } = false;
+        public bool HasUnfinishedGame { get; private set; } = false;
         public int SelectedTheme { get; set; } = 0;
         public HighScore HighScores { get; private set; }
         public int Rows { get; set; } = 4;
@@ -77,7 +77,7 @@ namespace MemoryGame
         public Player[] Players { get; private set; } = new Player[2];
         public List<Card> SelectedCards { get; private set; } //Holds 2 cards that currently are selected
         public Grid Panel { get; private set; }
-        public MainWindow Form1 { get; set; }
+        public MainWindow Form1 { get; private set; }
         public List<KeyValuePair<int, string>> Theme { get; private set; } = new List<KeyValuePair<int, string>>();
         public List<GameOptions> GameOptions { get; private set; } = new List<GameOptions>() {
             new GameOptions { Name = "Classic 4x4", Rows = 4, Columns = 4 },
@@ -107,6 +107,12 @@ namespace MemoryGame
             this.PopulateDeck();
         }
 
+        public void AddPlayers(string playerOne, string playerTwo)
+        {
+            this.Players[0] = new Player(playerOne);
+            this.Players[1] = new Player(playerTwo);
+        }
+
         /// <summary>
         /// Return the total amount of cards in the currently selected theme
         /// </summary>
@@ -130,7 +136,6 @@ namespace MemoryGame
             {
                 this.Form1.NavigateToHighScores();
                 this.Form1.ClearPanels();
-                this.Form1.UpdateHighScoresTable();
             });
         }
 
@@ -159,7 +164,6 @@ namespace MemoryGame
             gameState.Collumns = this.Collumns;
             gameState.Players = this.Players;
             string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
-            //TODO: clean this up and maybe add it to constructor/default value. Should we store multiple games or just one?
             this.SaveGameFile.Create();
             this.SaveGameFile.WriteToFile(json);
         }
@@ -218,9 +222,9 @@ namespace MemoryGame
                     }
                     this.Deck.Add(card);
                 }
+                this.Form1.GeneratePlayingField();
             }
             //Remove the savegame from the savefile to prevent abuse
-            this.Form1.GeneratePlayingField();
             this.SaveGameFile.WriteToFile("", overwrite: true);
             this.HasUnfinishedGame = false;
             //Pass back control to the player

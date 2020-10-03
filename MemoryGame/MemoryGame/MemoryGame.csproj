@@ -128,5 +128,11 @@
     <Resource Include="images\LOTR\SomeDwarf.jpg" />
     <Resource Include="images\LOTR\SwordWieldingLotrGuy.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="banana.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ring.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

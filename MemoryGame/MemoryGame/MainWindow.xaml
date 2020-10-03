@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:MemoryGame"
         mc:Ignorable="d"
         UseLayoutRounding="True"
-        Title="MainWindow" Height="450" Width="800" MinHeight="450" MinWidth="800" ResizeMode="CanResize">
+        Title="Memory game" Height="450" Width="800" MinHeight="450" MinWidth="800" ResizeMode="CanResize" Icon="ring.png">
     <DockPanel>
         <TabControl x:Name="TabControlNavigator"  Visibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-            <TabItem x:Name="TabHome" Header="Home" Visibility="Visible">
+            <TabItem x:Name="TabHome" Header="Home" Visibility="Collapsed">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="77*"/>
@@ -20,36 +20,40 @@
                     <Button x:Name="ButtonHighScores" Content="Highscores" VerticalAlignment="Top" MinHeight="70" MinWidth="800" Click="NavigateHighScores" Margin="0,150,-6,0" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="TabHighScores" Header="HighScore" Visibility="Visible">
+            <TabItem x:Name="TabHighScores" Header="HighScore" Visibility="Collapsed">
                 <Grid Background="#FFE5E5E5">
                     <Grid Background="#FFE5E5E5">
                         <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="HighScoresDataGrid"  AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Player" Width="*" Binding="{Binding Path=Name}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Score" Width="*" Binding="{Binding Path=Score}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                         <Button x:Name="ButtonHomeHighScores" Grid.Column="0" Grid.Row="1" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="60"/>
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="TabThemeSelection" Header="ThemeSelection" Visibility="Visible">
-                <Grid Background="#FFE5E5E5">
+            <TabItem x:Name="TabThemeSelection" Header="ThemeSelection" Visibility="Collapsed">
+                <Grid x:Name="ThemeGrid" Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="67*"></ColumnDefinition>
-                        <ColumnDefinition Width="178*"/>
-                        <ColumnDefinition Width="541*"/>
+                        <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Button x:Name="ButtonHomeTheme" Grid.Column="0" Grid.Row="1" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="60" Grid.ColumnSpan="3"/>
+                    <Label Content="Select theme&#xD;&#xA;" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" FontWeight="Bold" FontSize="18" Height="30"/>
                 </Grid>
 
             </TabItem>
-            <TabItem x:Name="TabPreGame" Header="TabPreGame" Visibility="Visible">
+            <TabItem x:Name="TabPreGame" Header="TabPreGame" Visibility="Collapsed">
                 <Grid Background="#FFE5E5E5" RenderTransformOrigin="0.503,0.555">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70"></RowDefinition>
@@ -71,7 +75,7 @@
                     <Button x:Name="ButtonHomePreGame" Grid.Column="0" Grid.Row="4" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="60"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="TabMemoryGame" Header="Memory" Visibility="Visible">
+            <TabItem x:Name="TabMemoryGame" Header="Memory" Visibility="Collapsed">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
