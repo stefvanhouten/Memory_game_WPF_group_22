@@ -171,6 +171,16 @@ namespace MemoryGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] incorrect {
+            get {
+                object obj = ResourceManager.GetObject("incorrect", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap lotr {
@@ -257,6 +267,16 @@ namespace MemoryGame.Properties {
             get {
                 object obj = ResourceManager.GetObject("tree", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] trumpets {
+            get {
+                object obj = ResourceManager.GetObject("trumpets", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

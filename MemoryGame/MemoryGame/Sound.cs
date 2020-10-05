@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading;
 using MemoryGame.Properties;
 using NAudio.Wave;
 
@@ -22,6 +23,8 @@ namespace MemoryGame
             player.Play();
         }
 
+        public static WaveOutEvent BackgroundPlayer = new WaveOutEvent();
+
         public static void StartBackgroundMusic(int selectedTheme)
         {
             // Create an empty Stream
@@ -44,10 +47,14 @@ namespace MemoryGame
             // Using LoopStream to loop the audio
             LoopStream loop = new LoopStream(mainOutputStream);
 
-            WaveOutEvent player = new WaveOutEvent();
+            BackgroundPlayer.Init(loop);
+            BackgroundPlayer.Play();
 
-            player.Init(loop);
-            player.Play();
+        }
+
+        public static void StopBackGroundMusic()
+        {
+            BackgroundPlayer.Stop();
         }
 
         private static Stream ByteArrayToStream(byte[] byteArray)

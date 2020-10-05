@@ -301,6 +301,7 @@ namespace MemoryGame
             }
             else
             {
+                Sound.PlayEffect(Resources.incorrect);
                 //If there was no match and the card has previously been turned we want to punish the player
                 //Check if any of the Cards in the this.SelectedCards list have the boolean HasBeenVisible flipped
                 if (this.SelectedCards.FindIndex(c => c.HasBeenVisible == true) >= 0)
@@ -340,6 +341,8 @@ namespace MemoryGame
             //Check if all cards are solved
             if (this.Deck.FindAll(c => c.IsSolved == false).Count == 0)
             {
+                Sound.StopBackGroundMusic();
+                Sound.PlayEffect(Resources.trumpets);
                 this.EndGame();
             }
         }

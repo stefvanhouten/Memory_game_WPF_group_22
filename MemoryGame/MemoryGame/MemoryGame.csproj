@@ -156,5 +156,11 @@
   <ItemGroup>
     <None Include="sounds\music\lotr.mp3" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="sounds\effects\trumpets.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sounds\effects\incorrect.mp3" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
