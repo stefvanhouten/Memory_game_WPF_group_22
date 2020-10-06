@@ -1,5 +1,6 @@
 ﻿using MemoryGame.Properties;
 using Newtonsoft.Json;
+using Security;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,7 +19,7 @@ namespace MemoryGame
     internal class Memory
     {
         private bool IsPlayerOnesTurn { get; set; } = true;
-        private readonly Files SaveGameFile = new Files(Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt"));
+        private readonly string SaveGamePath = Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt");
 
         //Probably need to look for a way to dynamicly do this
         public readonly Dictionary<int, List<CardNameAndImage>> ThemeImages = new Dictionary<int, List<CardNameAndImage>>()
@@ -108,7 +109,8 @@ namespace MemoryGame
             this.Theme.Add(new KeyValuePair<int, string>(1, "Lord Of The Rings"));
 
             //Check if there is a savefile that isn't empty
-            if (this.SaveGameFile.GetFileContent().Length > 0)
+            Files.Create(this.SaveGamePath);
+            if (Files.GetFileContent(this.SaveGamePath).Length > 0)
                 this.HasUnfinishedGame = true;
         }
 
@@ -118,6 +120,7 @@ namespace MemoryGame
         public void StartGame()
         {
             this.PopulateDeck();
+            Sound.StartBackgroundMusic(this.SelectedTheme);
         }
 
         public void AddPlayers(string playerOne, string playerTwo)
@@ -181,8 +184,8 @@ namespace MemoryGame
             gameState.Collumns = this.Collumns;
             gameState.Players = this.Players;
             string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
-            this.SaveGameFile.Create();
-            this.SaveGameFile.WriteToFile(json);
+            Files.Create(this.SaveGamePath);
+            Files.WriteToFile(this.SaveGamePath, json);
         }
 
         /// <summary>
@@ -201,7 +204,7 @@ namespace MemoryGame
                 //Use a dynamic object for the next part, could also create a custom class for this
                 dynamic gameState = new System.Dynamic.ExpandoObject();
                 //Load the data from the savegamefile
-                string json = this.SaveGameFile.GetFileContent();
+                string json = Files.GetFileContent(this.SaveGamePath);
                 //Deserialize the json
                 gameState = JsonConvert.DeserializeObject(json);
                 //For the next part we need to cast/convert all properties that are stored in our dyanmic list to the appropriate type
@@ -242,7 +245,7 @@ namespace MemoryGame
                 this.Form1.GeneratePlayingField();
             }
             //Remove the savegame from the savefile to prevent abuse
-            this.SaveGameFile.WriteToFile("", overwrite: true);
+            Files.WriteToFile(this.SaveGamePath, "", overwrite: true);
             this.HasUnfinishedGame = false;
             //Pass back control to the player
             this.GameIsFrozen = false;
@@ -286,6 +289,7 @@ namespace MemoryGame
         {
             if (this.SelectedCards[0].PairName == this.SelectedCards[1].PairName)
             {
+                Sound.PlayEffect(Resources.correct);
                 foreach (Card card in this.SelectedCards)
                 {
                     //When we have a matching pair mark them as solved to take them out of the game
@@ -299,6 +303,7 @@ namespace MemoryGame
             }
             else
             {
+                Sound.PlayEffect(Resources.incorrect);
                 //If there was no match and the card has previously been turned we want to punish the player
                 //Check if any of the Cards in the this.SelectedCards list have the boolean HasBeenVisible flipped
                 if (this.SelectedCards.FindIndex(c => c.HasBeenVisible == true) >= 0)
@@ -338,6 +343,8 @@ namespace MemoryGame
             //Check if all cards are solved
             if (this.Deck.FindAll(c => c.IsSolved == false).Count == 0)
             {
+                Sound.StopBackGroundMusic();
+                Sound.PlayEffect(Resources.trumpets);
                 this.EndGame();
             }
         }

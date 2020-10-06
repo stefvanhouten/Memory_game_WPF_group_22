@@ -35,12 +35,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,6 +63,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Sound.cs" />
+    <Compile Include="LoopStream.cs" />
     <Compile Include="MyExtensions.cs" />
     <Compile Include="ScoreBoard.cs" />
     <Page Include="MainWindow.xaml">
@@ -130,16 +136,25 @@
     <Resource Include="images\LOTR\SwordWieldingLotrGuy.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="banana.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="ring.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="images\Animals\frontside.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="images\LOTR\lotr.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sounds\effects\correct.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sounds\music\bangerbeat.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sounds\music\lotr.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sounds\effects\trumpets.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sounds\effects\incorrect.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

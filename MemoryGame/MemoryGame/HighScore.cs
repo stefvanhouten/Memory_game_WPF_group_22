@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 
 namespace MemoryGame
@@ -10,21 +10,21 @@ namespace MemoryGame
     /// </summary>
     struct HighScoreListing
     {
-        public string Name { get; private set; }
-        public int Score { get; private set; }
+        public string Name { get; set; }
+        public int Score { get; set; }
 
-        public HighScoreListing(string playerName, int playerScore)
-        {
-            /*  This class is used to store a listing from the HighScore class. 
-             *  After the memory game ends I will instantiate this class thus calling this constructor. 
-             *  
-             *  When this class is instantiated it will recieve a (string)playerName and a (int)playerScore. 
-             *  You will have to communicate this with Daniel and Wietze because the highscores should be saved
-             *  to a file and loaded from a file. 
-             */
-            this.Name = playerName;
-            this.Score = playerScore;
-        }
+        //public HighScoreListing(string playerName, int playerScore)
+        //{
+        //    /*  This class is used to store a listing from the HighScore class. 
+        //     *  After the memory game ends I will instantiate this class thus calling this constructor. 
+        //     *  
+        //     *  When this class is instantiated it will recieve a (string)playerName and a (int)playerScore. 
+        //     *  You will have to communicate this with Daniel and Wietze because the highscores should be saved
+        //     *  to a file and loaded from a file. 
+        //     */
+        //    this.Name = playerName;
+        //    this.Score = playerScore;
+        //}
     }
 
     /// <summary>
@@ -32,8 +32,8 @@ namespace MemoryGame
     /// </summary>
     class HighScore
     {
-        public List<HighScoreListing> highScores { get; set; }
-        public Files HighScorePath { get; private set; } = new Files(Path.Combine(Directory.GetCurrentDirectory(), "highscores.txt"));
+        public List<HighScoreListing> HighScores { get; set; }
+        private readonly string HighScorespath = Path.Combine(Directory.GetCurrentDirectory(), "highscores.txt");
         public HighScore()
         {
             /*  The highscores class is used to populate the table in the HighScoresTab in tabcontrol.
@@ -61,15 +61,42 @@ namespace MemoryGame
              *    sorts out the top (x) highest scoring games!
              *    
              */
-            this.highScores = new List<HighScoreListing>();
+            Files.Create(this.HighScorespath);
+            this.HighScores = new List<HighScoreListing>();
+            this.GetHighScores(15);
         }
 
         public void AddToHighScores(Player player)
         {
-            HighScoreListing listing = new HighScoreListing(player.Name, player.ScoreBoard.Score);
-            this.highScores.Add(listing);
-            string json = JsonConvert.SerializeObject(this.highScores);
-            this.HighScorePath.WriteToFile(json);
+            HighScoreListing listing = new HighScoreListing { Name = player.Name, Score = player.ScoreBoard.Score };
+            this.HighScores.Add(listing);
+            string json = JsonConvert.SerializeObject(this.HighScores, Formatting.Indented);
+            //Path.Combine(Directory.GetCurrentDirectory()
+            Files.Create(this.HighScorespath);
+            Files.WriteToFile(this.HighScorespath, json, true);
+        }
+
+        //is going to need a return type, for now void for the sake of it
+        public void GetHighScores(int limit)
+        {
+            string moppie = Files.GetFileContent(this.HighScorespath);
+            if (moppie.Length > 0)
+            {
+                this.HighScores = JsonConvert.DeserializeObject<List<HighScoreListing>>(moppie);
+            }
+            //retrieve the contents of the file with HighScore.HighScorePath.GetFileContent
+            //store the returned value in a variable
+            //decode the JSON variable and append to this.highScores
+            //if called this.ReArrangeHighScores(limit); re-arranges the list...
+            // and returns 0 to limit
+            //return the "returned" value of this.ReArrangeHighScores(limit);
+        }
+
+        private void ReArrangeHighScores(int limit)
+        {
+            //this will need a return type as well, but for now, first create the method
+            // Re-arrange the HighScores from high to low or low to high
+            //int limit returns the highscores from 0 to "limit"
         }
     }
 }

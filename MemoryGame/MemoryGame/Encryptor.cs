@@ -11,26 +11,23 @@ namespace Security
     /// <summary>
     /// Provides encryption and decryption for strings
     /// </summary>
-    class Encryptor
+    static class Encryptor
     {
         // Set the password
-        static readonly string Password = "RandomgEneraTeDsTriNg";
+        static readonly byte[] KEY = new byte[32] { 118, 123, 23, 17, 161, 152, 35, 68, 126, 213, 16, 115, 68, 217, 58, 108, 56, 218, 5, 78, 28, 128, 113, 208, 61, 56, 10, 87, 187, 162, 233, 38 };
 
         // Set the IV (initialization vector) value
-        static readonly string IV = "@5B2C6G2s5H2F1p0";
+        static readonly byte[] IV = new byte[16] { 33, 241, 14, 16, 103, 18, 14, 248, 4, 54, 18, 5, 60, 76, 16, 191 };
 
-        public string Encrypt(string rawInput)
+        static public byte[] Encrypt(string rawInput)
         {
             // Will contain the encrypted value later
             byte[] encrypted;
 
-            // Gets the input string and converts it to a byte array
-            byte[] inputBytes = Encoding.UTF8.GetBytes(rawInput);
-
             using (RijndaelManaged rijAlg = new RijndaelManaged())
             {
                 // Create an encryptor to perform the stream transform
-                ICryptoTransform encryptor = rijAlg.CreateEncryptor(Encoding.ASCII.GetBytes(Password), Encoding.ASCII.GetBytes(IV));
+                ICryptoTransform encryptor = rijAlg.CreateEncryptor(KEY, IV);
 
                 // Create the streams used for encryption
                 using (MemoryStream msEncrypt = new MemoryStream())
@@ -40,28 +37,26 @@ namespace Security
                         using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
                         {
                             //Write all data to the stream
-                            swEncrypt.Write(inputBytes);
+                            swEncrypt.Write(rawInput);
                         }
                         encrypted = msEncrypt.ToArray();
                     }
                 }
             }
 
-            return System.Text.Encoding.UTF8.GetString(encrypted);
+            return encrypted;
         }
 
-        public string Decrypt(string encryptedInput)
+        public static string Decrypt(byte[] inputBytes)
         {
             // Will contain the decrypted value later
             string decrypted = null;
 
             // Gets the input string and converts it to a byte array
-            byte[] inputBytes = Encoding.UTF8.GetBytes(encryptedInput);
-
             using (RijndaelManaged rijAlg = new RijndaelManaged())
             {
                 // Create a decryptor to perform the stream transform
-                ICryptoTransform decryptor = rijAlg.CreateDecryptor(Encoding.ASCII.GetBytes(Password), Encoding.ASCII.GetBytes(IV));
+                ICryptoTransform decryptor = rijAlg.CreateDecryptor(KEY, IV);
 
                 // Create the streams used for decryption
                 using (MemoryStream msDecrypt = new MemoryStream(inputBytes))
