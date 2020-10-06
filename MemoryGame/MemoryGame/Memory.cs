@@ -118,6 +118,7 @@ namespace MemoryGame
         public void StartGame()
         {
             this.PopulateDeck();
+            Sound.StartBackgroundMusic(this.SelectedTheme);
         }
 
         public void AddPlayers(string playerOne, string playerTwo)
@@ -286,6 +287,7 @@ namespace MemoryGame
         {
             if (this.SelectedCards[0].PairName == this.SelectedCards[1].PairName)
             {
+                Sound.PlayEffect(Resources.correct);
                 foreach (Card card in this.SelectedCards)
                 {
                     //When we have a matching pair mark them as solved to take them out of the game
@@ -299,6 +301,7 @@ namespace MemoryGame
             }
             else
             {
+                Sound.PlayEffect(Resources.incorrect);
                 //If there was no match and the card has previously been turned we want to punish the player
                 //Check if any of the Cards in the this.SelectedCards list have the boolean HasBeenVisible flipped
                 if (this.SelectedCards.FindIndex(c => c.HasBeenVisible == true) >= 0)
@@ -338,6 +341,8 @@ namespace MemoryGame
             //Check if all cards are solved
             if (this.Deck.FindAll(c => c.IsSolved == false).Count == 0)
             {
+                Sound.StopBackGroundMusic();
+                Sound.PlayEffect(Resources.trumpets);
                 this.EndGame();
             }
         }

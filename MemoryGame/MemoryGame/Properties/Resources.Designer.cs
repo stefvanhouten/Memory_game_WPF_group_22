@@ -81,6 +81,16 @@ namespace MemoryGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] bangerbeat {
+            get {
+                object obj = ResourceManager.GetObject("bangerbeat", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap book {
@@ -107,6 +117,16 @@ namespace MemoryGame.Properties {
             get {
                 object obj = ResourceManager.GetObject("car", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] correct {
+            get {
+                object obj = ResourceManager.GetObject("correct", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -151,12 +171,32 @@ namespace MemoryGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] incorrect {
+            get {
+                object obj = ResourceManager.GetObject("incorrect", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap lotr {
             get {
                 object obj = ResourceManager.GetObject("lotr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] lotrtrack {
+            get {
+                object obj = ResourceManager.GetObject("lotrtrack", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -227,6 +267,16 @@ namespace MemoryGame.Properties {
             get {
                 object obj = ResourceManager.GetObject("tree", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] trumpets {
+            get {
+                object obj = ResourceManager.GetObject("trumpets", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
