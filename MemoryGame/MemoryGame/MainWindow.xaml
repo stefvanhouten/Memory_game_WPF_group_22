@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MemoryGame"
         mc:Ignorable="d"
         UseLayoutRounding="True"
-        Title="Memory game" Height="450" Width="800" MinHeight="450" MinWidth="800" ResizeMode="CanResize" Icon="ring.png">
+        Title="Memory game" Height="450" Width="800" MinHeight="450" MinWidth="800" ResizeMode="CanResize">
     <DockPanel>
         <TabControl x:Name="TabControlNavigator"  Visibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
             <TabItem x:Name="TabHome" Header="Home" Visibility="Collapsed">

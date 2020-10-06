@@ -108,6 +108,7 @@ namespace MemoryGame
             this.Theme.Add(new KeyValuePair<int, string>(1, "Lord Of The Rings"));
 
             //Check if there is a savefile that isn't empty
+            Files.Create(this.SaveGamePath);
             if (Files.GetFileContent(this.SaveGamePath).Length > 0)
                 this.HasUnfinishedGame = true;
         }

@@ -32,9 +32,8 @@ namespace MemoryGame
     /// </summary>
     class HighScore
     {
-        private int MaximumEntries;
-
         public List<HighScoreListing> HighScores { get; set; }
+        private readonly string HighScorespath = Path.Combine(Directory.GetCurrentDirectory(), "highscores.txt");
         public HighScore()
         {
             /*  The highscores class is used to populate the table in the HighScoresTab in tabcontrol.
@@ -62,6 +61,7 @@ namespace MemoryGame
              *    sorts out the top (x) highest scoring games!
              *    
              */
+            Files.Create(this.HighScorespath);
             this.HighScores = new List<HighScoreListing>();
             this.GetHighScores(15);
         }
@@ -72,14 +72,14 @@ namespace MemoryGame
             this.HighScores.Add(listing);
             string json = JsonConvert.SerializeObject(this.HighScores, Formatting.Indented);
             //Path.Combine(Directory.GetCurrentDirectory()
-            Files.Create(Path.Combine(Directory.GetCurrentDirectory(), "highscores.txt"));
-            Files.WriteToFile(Path.Combine(Directory.GetCurrentDirectory(), "highscores.txt"), json, true);
+            Files.Create(this.HighScorespath);
+            Files.WriteToFile(this.HighScorespath, json, true);
         }
 
         //is going to need a return type, for now void for the sake of it
         public void GetHighScores(int limit)
         {
-            string moppie = Files.GetFileContent(Path.Combine(Directory.GetCurrentDirectory(), "highscores.txt"));
+            string moppie = Files.GetFileContent(this.HighScorespath);
             if (moppie.Length > 0)
             {
                 this.HighScores = JsonConvert.DeserializeObject<List<HighScoreListing>>(moppie);

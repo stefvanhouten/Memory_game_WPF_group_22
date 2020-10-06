@@ -136,12 +136,6 @@
     <Resource Include="images\LOTR\SwordWieldingLotrGuy.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="banana.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="ring.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="images\Animals\frontside.jpg" />
   </ItemGroup>
   <ItemGroup>
