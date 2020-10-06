@@ -18,7 +18,7 @@ namespace MemoryGame
     internal class Memory
     {
         private bool IsPlayerOnesTurn { get; set; } = true;
-        private readonly Files SaveGameFile = new Files(Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt"));
+        private readonly string SaveGamePath = Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt");
 
         //Probably need to look for a way to dynamicly do this
         public readonly Dictionary<int, List<CardNameAndImage>> ThemeImages = new Dictionary<int, List<CardNameAndImage>>()
@@ -108,7 +108,7 @@ namespace MemoryGame
             this.Theme.Add(new KeyValuePair<int, string>(1, "Lord Of The Rings"));
 
             //Check if there is a savefile that isn't empty
-            if (this.SaveGameFile.GetFileContent().Length > 0)
+            if (Files.GetFileContent(this.SaveGamePath).Length > 0)
                 this.HasUnfinishedGame = true;
         }
 
@@ -182,8 +182,8 @@ namespace MemoryGame
             gameState.Collumns = this.Collumns;
             gameState.Players = this.Players;
             string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
-            this.SaveGameFile.Create();
-            this.SaveGameFile.WriteToFile(json);
+            Files.Create(this.SaveGamePath);
+            Files.WriteToFile(this.SaveGamePath, json);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace MemoryGame
                 //Use a dynamic object for the next part, could also create a custom class for this
                 dynamic gameState = new System.Dynamic.ExpandoObject();
                 //Load the data from the savegamefile
-                string json = this.SaveGameFile.GetFileContent();
+                string json = Files.GetFileContent(this.SaveGamePath);
                 //Deserialize the json
                 gameState = JsonConvert.DeserializeObject(json);
                 //For the next part we need to cast/convert all properties that are stored in our dyanmic list to the appropriate type
@@ -243,7 +243,7 @@ namespace MemoryGame
                 this.Form1.GeneratePlayingField();
             }
             //Remove the savegame from the savefile to prevent abuse
-            this.SaveGameFile.WriteToFile("", overwrite: true);
+            Files.WriteToFile(this.SaveGamePath, "", overwrite: true);
             this.HasUnfinishedGame = false;
             //Pass back control to the player
             this.GameIsFrozen = false;
