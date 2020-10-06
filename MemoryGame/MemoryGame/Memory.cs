@@ -320,9 +320,11 @@ namespace MemoryGame
                     card.Dispatcher.Invoke(() =>
                     {
                         var imageSource = this.BitmapToImageSource(this.CardFrontSide[this.SelectedTheme]);
-                        var image = new System.Windows.Controls.Image();
-                        image.Source = imageSource;
-                        image.Stretch = Stretch.Fill;
+                        var image = new System.Windows.Controls.Image()
+                        {
+                            Source = imageSource,
+                            Stretch = Stretch.Fill
+                        };
                         card.Content = image;
                     });
                     card.HasBeenVisible = true;
@@ -376,9 +378,11 @@ namespace MemoryGame
             {
                 //Show the image that we stored in CardImage
                 var imageSource = this.BitmapToImageSource(selectedCard.CardImage);
-                var image = new System.Windows.Controls.Image();
-                image.Source = imageSource;
-                image.Stretch = Stretch.Fill;
+                var image = new System.Windows.Controls.Image()
+                {
+                    Source = imageSource,
+                    Stretch = Stretch.Fill
+                };
                 button.Content = image;
                 this.SelectedCards.Add(button);
             }
