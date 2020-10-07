@@ -8,8 +8,8 @@ namespace MemoryGame
     {
         //public string Name { get; set; }
         public string PairName { get; set; }
-        public bool IsSolved { get; set; } = false;
-        public bool HasBeenVisible { get; set; } = false;
+        public bool IsSolved { get; set; }
+        public bool HasBeenVisible { get; set; }
         public Bitmap CardImage { get; set; } //Custom bitmap to store the image in. PictureBox.Image cant be hidden without losing the image
     }
 
@@ -17,8 +17,8 @@ namespace MemoryGame
     {
         public string Name { get; set; }
         public string PairName { get; set; }
-        public bool IsSolved { get; set; } = false;
-        public bool HasBeenVisible { get; set; } = false;
-        public bool IsSelected { get; set; } = false;
+        public bool IsSolved { get; set; }
+        public bool HasBeenVisible { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

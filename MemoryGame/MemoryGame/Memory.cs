@@ -1,6 +1,5 @@
 ﻿using MemoryGame.Properties;
 using Newtonsoft.Json;
-using Security;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -20,8 +19,6 @@ namespace MemoryGame
     {
         private bool IsPlayerOnesTurn { get; set; } = true;
         private readonly string SaveGamePath = Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt");
-        private readonly string TestPath = Path.Combine(Directory.GetCurrentDirectory(), "test.txt");
-
 
         //Probably need to look for a way to dynamicly do this
         public readonly Dictionary<int, List<CardNameAndImage>> ThemeImages = new Dictionary<int, List<CardNameAndImage>>()
@@ -79,8 +76,8 @@ namespace MemoryGame
             { 1,  Resources.lotr },
         };
 
-        public bool GameIsFrozen { get; private set; } = false;
-        public bool HasUnfinishedGame { get; private set; } = false;
+        public bool GameIsFrozen { get; private set; }
+        public bool HasUnfinishedGame { get; private set; }
 
         public List<Card> Deck { get; private set; }
         public List<Card> SelectedCards { get; private set; } //Holds 2 cards that currently are selected
@@ -97,7 +94,7 @@ namespace MemoryGame
         public Grid Panel { get; private set; }
         public MainWindow Form1 { get; private set; }
 
-        public int SelectedTheme { get; set; } = 0;
+        public int SelectedTheme { get; set; }
         public int Rows { get; set; } = 4;
         public int Collumns { get; set; } = 4;
 
@@ -322,7 +319,7 @@ namespace MemoryGame
                     //Reset the cards to show no image and set the property to ensure that we know the card has been flipped before
                     card.Dispatcher.Invoke(() =>
                     {
-                        var imageSource = this.BitmapToImageSource(this.CardFrontSide[this.SelectedTheme]);
+                        var imageSource = Memory.BitmapToImageSource(this.CardFrontSide[this.SelectedTheme]);
                         var image = new System.Windows.Controls.Image()
                         {
                             Source = imageSource,
@@ -380,8 +377,8 @@ namespace MemoryGame
             else
             {
                 //Show the image that we stored in CardImage
-                var imageSource = this.BitmapToImageSource(selectedCard.CardImage);
-                var image = new System.Windows.Controls.Image()
+                BitmapImage imageSource = Memory.BitmapToImageSource(selectedCard.CardImage);
+                System.Windows.Controls.Image image = new System.Windows.Controls.Image()
                 {
                     Source = imageSource,
                     Stretch = Stretch.Fill
@@ -403,7 +400,7 @@ namespace MemoryGame
             }
         }
 
-        public BitmapImage BitmapToImageSource(Bitmap bitmap)
+        public static BitmapImage BitmapToImageSource(Bitmap bitmap)
         {
             using (MemoryStream memory = new MemoryStream())
             {

@@ -85,7 +85,7 @@ namespace MemoryGame
         {
             ImageBrush background = new ImageBrush()
             {
-                ImageSource = this.game.BitmapToImageSource(this.game.BackgroundTheme[this.game.SelectedTheme]),
+                ImageSource = Memory.BitmapToImageSource(this.game.BackgroundTheme[this.game.SelectedTheme]),
                 Opacity = 0.5
             };
             this.HomeGrid.Background = background;
@@ -176,13 +176,13 @@ namespace MemoryGame
                     Card cardBtn = this.game.Deck[index];
                     var image = new System.Windows.Controls.Image() { 
                         Stretch = Stretch.Fill, 
-                        Source = this.game.BitmapToImageSource(this.game.CardFrontSide[this.game.SelectedTheme]) 
+                        Source = Memory.BitmapToImageSource(this.game.CardFrontSide[this.game.SelectedTheme]) 
                     };
 
                     if (cardBtn.IsSolved || this.game.SelectedCards.Contains(cardBtn))
                     {
                         int position = this.game.ThemeImages[this.game.SelectedTheme].FindIndex(c => c.Name == cardBtn.PairName);
-                        var imageSource = this.game.BitmapToImageSource(this.game.ThemeImages[this.game.SelectedTheme][position].Resource);
+                        var imageSource = Memory.BitmapToImageSource(this.game.ThemeImages[this.game.SelectedTheme][position].Resource);
                         image.Source = imageSource;
                     }
 
