@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using Security;
 
 namespace MemoryGame
 {
@@ -73,7 +74,7 @@ namespace MemoryGame
             string json = JsonConvert.SerializeObject(this.HighScores, Formatting.Indented);
             //Path.Combine(Directory.GetCurrentDirectory()
             Files.Create(this.HighScorespath);
-            Files.WriteToFile(this.HighScorespath, json, true);
+            Files.WriteToFile(this.HighScorespath, json);
         }
 
         //is going to need a return type, for now void for the sake of it

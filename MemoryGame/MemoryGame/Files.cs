@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Security;
+using System;
 using System.IO;
 /// <summary>
 /// Provides basic functionality for handling files.
@@ -33,25 +35,10 @@ static class Files
     /// </summary>
     /// <param name="writeMeToFile"></param>
     /// <param name="overwrite"></param>
-    public static void WriteToFile(string completePath, string writeMeToFile, bool overwrite = false)
+    public static void WriteToFile(string completePath, string writeMeToFile)
     {
-        if (overwrite)
-        {
-            File.WriteAllText(completePath, writeMeToFile);
-        }
-        else
-        {
-            /*
-             * Append the text to the file and dispose the process.
-             * Disposing the process prevents the code from coming to halt when the same file gets accessed again
-             * ADDINITIONAL INFO:
-             * StreamWriter implements a TextWriter for writing characters to a stream in a particular encoding.
-             */
-            using (StreamWriter sw = File.AppendText(completePath))
-            {
-                sw.WriteLine(writeMeToFile);
-            }
-        }
+        byte[] data = Encryptor.Encrypt(writeMeToFile);
+        File.WriteAllBytes(completePath, data);
     }
 
     /// <summary>
@@ -60,7 +47,12 @@ static class Files
     /// <returns>string Content stored in file</returns>
     public static string GetFileContent(string completePath)
     {
-        return File.ReadAllText(completePath);
+        string data = Convert.ToBase64String(File.ReadAllBytes(completePath));
+        if(data.Length > 0)
+        {
+            return Encryptor.Decrypt(data);
+        }
+        return data;
     }
 
     /// <summary>

@@ -271,7 +271,7 @@ namespace MemoryGame
 
         public void NavigateHighScores(object sender, EventArgs e)
         {
-            TabHighScores.IsSelected = true;
+            this.NavigateToHighScores();
         }
 
         public void NavigateThemeSelection(object sender, EventArgs e)

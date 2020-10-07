@@ -20,6 +20,8 @@ namespace MemoryGame
     {
         private bool IsPlayerOnesTurn { get; set; } = true;
         private readonly string SaveGamePath = Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt");
+        private readonly string TestPath = Path.Combine(Directory.GetCurrentDirectory(), "test.txt");
+
 
         //Probably need to look for a way to dynamicly do this
         public readonly Dictionary<int, List<CardNameAndImage>> ThemeImages = new Dictionary<int, List<CardNameAndImage>>()
@@ -112,6 +114,7 @@ namespace MemoryGame
             Files.Create(this.SaveGamePath);
             if (Files.GetFileContent(this.SaveGamePath).Length > 0)
                 this.HasUnfinishedGame = true;
+
         }
 
         /// <summary>
@@ -245,7 +248,7 @@ namespace MemoryGame
                 this.Form1.GeneratePlayingField();
             }
             //Remove the savegame from the savefile to prevent abuse
-            Files.WriteToFile(this.SaveGamePath, "", overwrite: true);
+            Files.WriteToFile(this.SaveGamePath, "");
             this.HasUnfinishedGame = false;
             //Pass back control to the player
             this.GameIsFrozen = false;
