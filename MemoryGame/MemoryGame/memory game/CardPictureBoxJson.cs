@@ -1,6 +1,6 @@
 ﻿namespace MemoryGame
 {
-    class CardPictureBoxJson
+    public class CardPictureBoxJson
     {
         public string Name { get; set; }
         public string PairName { get; set; }

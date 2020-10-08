@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MemoryGame
 {
-    class GameState
+    public class GameState
     {
         public bool isPlayerOnesTurn { get; set; }
         public int SelectedTheme { get; set; }

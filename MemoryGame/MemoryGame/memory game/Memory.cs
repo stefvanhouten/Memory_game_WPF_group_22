@@ -15,13 +15,13 @@ namespace MemoryGame
     /// <summary>
     /// Base class for the Memory game.
     /// </summary>
-    internal class Memory
+    public class Memory
     {
         private bool IsPlayerOnesTurn { get; set; } = true;
         private readonly string SaveGamePath = Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt");
 
         #region Large dictionary containing card images and card names
-        public readonly Dictionary<int, List<CardNameAndImage>> ThemeImages = new Dictionary<int, List<CardNameAndImage>>()
+        public Dictionary<int, List<CardNameAndImage>> ThemeImages { get; private set; } = new Dictionary<int, List<CardNameAndImage>>()
         {
             { 0, new List<CardNameAndImage>()
                 {
@@ -133,13 +133,13 @@ namespace MemoryGame
             },
 
         };
-        public readonly Dictionary<int, Bitmap> CardFrontSide = new Dictionary<int, Bitmap>()
+        public Dictionary<int, Bitmap> CardFrontSide { get; private set; } = new Dictionary<int, Bitmap>()
         {
             { 0,  Resources.frontside },
             { 1,  Resources.lotr },
         };
 
-        public readonly Dictionary<int, Bitmap> BackgroundTheme = new Dictionary<int, Bitmap>()
+        public Dictionary<int, Bitmap> BackgroundTheme { get; private set; } = new Dictionary<int, Bitmap>()
         {
             { 0,  Resources.frontside },
             { 1,  Resources.lotr },
@@ -521,6 +521,10 @@ namespace MemoryGame
         public void CardClicked(object sender, System.EventArgs e)
         {
             Card button = (Card)sender;
+            if (button == null)
+            {
+                return;
+            }
             Card selectedCard = this.Deck[Convert.ToInt32(button.Name.Substring(1))];
             //First check all the conditions on which we want to exit early
             if (this.GameIsFrozen || this.SelectedCards.Contains(selectedCard) || selectedCard.IsSolved)
