@@ -79,6 +79,19 @@ static class Files
         }
     }
 
+    /// <summary>
+    /// Returns the content that is stored in the file
+    /// </summary>
+    /// <returns>string Content stored in file</returns>
+    public static string GetFileContent(string completePath)
+    {
+        string data = Convert.ToBase64String(File.ReadAllBytes(completePath));
+        if (data.Length > 0)
+        {
+            return Encryptor.Decrypt(data);
+        }
+        return data;
+    }
 
     /// <summary>
     /// Returns the content that is stored in the file
@@ -92,11 +105,6 @@ static class Files
             return Encryptor.Decrypt(data);
         }
         return data;
-    }
-
-    public static byte[] GetBytesFromFileContent(string completePath)
-    {
-        return File.ReadAllBytes(completePath);
     }
 
     /// <summary>

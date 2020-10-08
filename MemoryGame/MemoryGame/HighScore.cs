@@ -65,11 +65,17 @@ namespace MemoryGame
              */
             Files.Create(this.HighScorespath);
             this.HighScores = new List<HighScoreListing>();
-            this.GetHighScores(15);
+            this.GetHighScores();
         }
 
         public void AddToHighScores(Player player)
         {
+            //without this piece there is (apparently) a chance of the application breaking
+            //the constructor does not construct this for me. No idea why, no, not my fault. I cloned dev.
+            if (this.HighScores == null)
+            {
+                this.HighScores = new List<HighScoreListing>();
+            }
             /*
              * Add to the highscores list
              */
@@ -98,7 +104,7 @@ namespace MemoryGame
          * You get the List returned in case any mutation is required or any specific handling of the List is required
          * If not needed, don't catch it, if required, you can catch it and handle it in the way you want
          */
-        public List<HighScoreListing> GetHighScores(int limit)
+        public List<HighScoreListing> GetHighScores()
         {
             /*
              * Get the content of the file (highscores)
@@ -126,6 +132,18 @@ namespace MemoryGame
                 this.HighScores.Sort((x, y) => y.Score.CompareTo(x.Score));
             }
             return this.HighScores;
+        }
+
+        public HighScoreListing[] Limit(int limit)
+        {
+            //create an array with a limit
+            HighScoreListing[] limitedHighScores = new HighScoreListing[limit];
+            
+            //copy the array to your desired limit
+            this.HighScores.CopyTo(limitedHighScores, limit);
+
+            //return the array and read it out to board
+            return limitedHighScores;
         }
     }
 }
