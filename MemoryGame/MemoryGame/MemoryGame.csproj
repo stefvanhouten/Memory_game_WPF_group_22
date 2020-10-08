@@ -66,15 +66,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="memory game\CardPictureBoxJson.cs" />
+    <Compile Include="memory game\GameState.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Sound.cs" />
-    <Compile Include="LoopStream.cs" />
+    <Compile Include="sounds\Sound.cs" />
+    <Compile Include="sounds\LoopStream.cs" />
     <Compile Include="MyExtensions.cs" />
-    <Compile Include="ScoreBoard.cs" />
+    <Compile Include="memory game\ScoreBoard.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -83,21 +85,21 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CardNameAndImage.cs" />
-    <Compile Include="Card.cs" />
+    <Compile Include="memory game\CardNameAndImage.cs" />
+    <Compile Include="memory game\Card.cs" />
     <Compile Include="Dir.cs" />
     <Compile Include="Encryptor.cs" />
     <Compile Include="Files.cs" />
-    <Compile Include="GameOptions.cs" />
-    <Compile Include="HighScore.cs" />
+    <Compile Include="memory game\GameOptions.cs" />
+    <Compile Include="memory game\HighScore.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Memory.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="memory game\Memory.cs" />
+    <Compile Include="memory game\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
