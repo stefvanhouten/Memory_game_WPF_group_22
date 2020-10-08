@@ -98,6 +98,7 @@ namespace MemoryGame
             //this will need a return type as well, but for now, first create the method
             // Re-arrange the HighScores from high to low or low to high
             //int limit returns the highscores from 0 to "limit"
+            Console.WriteLine();
         }
     }
 }
