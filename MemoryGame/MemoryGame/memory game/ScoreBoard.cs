@@ -9,9 +9,9 @@ namespace MemoryGame
     /// <summary>
     /// ScoreBoard keeps track of player objects score. 
     /// </summary>
-    class ScoreBoard
+    public class ScoreBoard
     {
-        public int Score { get; private set; } = 0;
+        public int Score { get; private set; }
         private int RemoveFromScore { get; set; } = 2;
 
         public ScoreBoard()

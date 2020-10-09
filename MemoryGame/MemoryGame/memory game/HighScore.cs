@@ -9,7 +9,7 @@ namespace MemoryGame
     /// <summary>
     /// Template for a HighScore listing. 
     /// </summary>
-    struct HighScoreListing
+    public class HighScoreListing
     {
         public string Name { get; set; }
         public int Score { get; set; }
@@ -31,7 +31,7 @@ namespace MemoryGame
     /// <summary>
     /// Keeps track of the memory game current highest scoring players.
     /// </summary>
-    class HighScore
+    public class HighScore
     {
         public List<HighScoreListing> HighScores { get; set; }
         private readonly string HighScorespath = Path.Combine(Directory.GetCurrentDirectory(), "highscores.txt");

@@ -198,6 +198,25 @@ namespace MemoryGame
             }
         }
 
+        public void CleanupAfterGame()
+        {
+            this.InputPlayer1.Text = "";
+            this.InputPlayer2.Text = "";
+            this.NavigateToHighScores();
+            this.ClearPanels();
+        }
+
+        public void UpdateScoreBoardAndCurrentPlayer(Player playerOne, Player playerTwo, bool isPlayerOnesTurn)
+        {
+            if(playerOne != null && playerTwo != null)
+            {
+                this.LabelPlayerOneScore.Content = $"{playerOne.Name} : {playerOne.ScoreBoard.Score}";
+                this.LabelPlayerTwoScore.Content = $"{playerTwo.Name} : {playerTwo.ScoreBoard.Score}";
+                this.LabelCurrentPlayer.Content = !isPlayerOnesTurn ? $"Current player: {playerOne.Name}" : $"Current player: {playerTwo.Name}";
+            }
+
+        }
+
         public void PauseResumeMemory(object sender, RoutedEventArgs e)
         {
             if(this.PauseResumeBtn.Content.ToString().Contains("Pause"))

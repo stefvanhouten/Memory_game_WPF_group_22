@@ -15,13 +15,13 @@ namespace MemoryGame
     /// <summary>
     /// Base class for the Memory game.
     /// </summary>
-    internal class Memory
+    public class Memory
     {
         private bool IsPlayerOnesTurn { get; set; } = true;
         private readonly string SaveGamePath = Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt");
 
-        //Probably need to look for a way to dynamicly do this
-        public readonly Dictionary<int, List<CardNameAndImage>> ThemeImages = new Dictionary<int, List<CardNameAndImage>>()
+        #region Large dictionary containing card images and card names
+        public Dictionary<int, List<CardNameAndImage>> ThemeImages { get; private set; } = new Dictionary<int, List<CardNameAndImage>>()
         {
             { 0, new List<CardNameAndImage>()
                 {
@@ -133,17 +133,18 @@ namespace MemoryGame
             },
 
         };
-        public readonly Dictionary<int, Bitmap> CardFrontSide = new Dictionary<int, Bitmap>()
+        public Dictionary<int, Bitmap> CardFrontSide { get; private set; } = new Dictionary<int, Bitmap>()
         {
             { 0,  Resources.frontside },
             { 1,  Resources.lotr },
         };
 
-        public readonly Dictionary<int, Bitmap> BackgroundTheme = new Dictionary<int, Bitmap>()
+        public Dictionary<int, Bitmap> BackgroundTheme { get; private set; } = new Dictionary<int, Bitmap>()
         {
             { 0,  Resources.frontside },
             { 1,  Resources.lotr },
         };
+        #endregion
 
         public bool GameIsFrozen { get; private set; }
         public bool HasUnfinishedGame { get; private set; }
@@ -158,8 +159,9 @@ namespace MemoryGame
             new GameOptions { Name = "Hard 5x6", Rows = 5, Columns = 6 },
         };
 
-        public HighScore HighScores { get; private set; }
         public Player[] Players { get; private set; } = new Player[2];
+
+        public HighScore HighScores { get; private set; }
         public Grid Panel { get; private set; }
         public MainWindow Form1 { get; private set; }
 
@@ -189,9 +191,28 @@ namespace MemoryGame
         public void StartGame()
         {
             this.PopulateDeck();
+            this.ShuffleDeck();
             Sound.StartBackgroundMusic(this.SelectedTheme);
         }
 
+        /// <summary>
+        /// Ends the current memory game and redirects to highscores page.
+        /// Calls the HighScores.AddToHighScores method to add the previously played game to the highscores
+        /// </summary>
+        public void EndGame()
+        {
+            this.AddPlayersToHighScore();
+            this.Form1.Dispatcher.Invoke(() =>
+            {
+                this.Form1.CleanupAfterGame();
+            });
+        }
+
+        /// <summary>
+        /// Creates two instances of the Player class and gives them the user chosen names.
+        /// </summary>
+        /// <param name="playerOne"></param>
+        /// <param name="playerTwo"></param>
         public void AddPlayers(string playerOne, string playerTwo)
         {
             this.Players[0] = new Player(playerOne);
@@ -207,32 +228,48 @@ namespace MemoryGame
             return this.ThemeImages[this.SelectedTheme].Count;
         }
 
+
         /// <summary>
-        /// Ends the current memory game and redirects to highscores page.
-        /// Calls the HighScores.AddToHighScores method to add the previously played game to the highscores
+        /// Adds both players to the highscores. 
+        /// Afterwards clean up the array as preparation for the next game.
         /// </summary>
-        public void EndGame()
+        private void AddPlayersToHighScore()
         {
             foreach (Player player in this.Players)
             {
                 this.HighScores.AddToHighScores(player);
             }
             Array.Clear(this.Players, 0, this.Players.Length);
-            this.Form1.Dispatcher.Invoke(() =>
-            {
-                this.Form1.InputPlayer1.Text = "";
-                this.Form1.InputPlayer2.Text = "";
-                this.Form1.NavigateToHighScores();
-                this.Form1.ClearPanels();
-            });
         }
 
+        /// <summary>
+        /// Freezes the game, converts current gamestate to JSON and stores it into the savefile.
+        /// </summary>
         public void PauseGame()
         {
             this.GameIsFrozen = true;
-            dynamic gameState = new System.Dynamic.ExpandoObject();
+            string json = this.ConvertGameStateToJson();
+            this.SaveCurrentGameStateToSaveFile(json);
+        }
+
+        /// <summary>
+        /// Write JSON to memory game savefile.
+        /// </summary>
+        /// <param name="json"></param>
+        private void SaveCurrentGameStateToSaveFile(string json)
+        {
+            Files.Create(this.SaveGamePath);
+            Files.WriteToFile(this.SaveGamePath, json);
+        }
+
+        /// <summary>
+        /// Convert the current state of the game to JSON. 
+        /// </summary>
+        /// <returns></returns>
+        private string ConvertGameStateToJson()
+        {
+            //dynamic gameState = new System.Dynamic.ExpandoObject();
             List<CardPictureBoxJson> jsonConvertableDeck = new List<CardPictureBoxJson>();
-            List<CardPictureBoxJson> jsonConvertableSelectedCards = new List<CardPictureBoxJson>();
 
             foreach (Card card in this.Deck)
             {
@@ -246,15 +283,63 @@ namespace MemoryGame
                 });
             }
 
-            gameState.IsPlayerOnesTurn = this.IsPlayerOnesTurn;
-            gameState.SelectedTheme = this.SelectedTheme;
-            gameState.Deck = jsonConvertableDeck;
-            gameState.Rows = this.Rows;
-            gameState.Collumns = this.Collumns;
-            gameState.Players = this.Players;
-            string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
-            Files.Create(this.SaveGamePath);
-            Files.WriteToFile(this.SaveGamePath, json);
+            //gameState.IsPlayerOnesTurn = this.IsPlayerOnesTurn;
+            //gameState.SelectedTheme = this.SelectedTheme;
+            //gameState.Deck = jsonConvertableDeck;
+            //gameState.Rows = this.Rows;
+            //gameState.Collumns = this.Collumns;
+            //gameState.Players = this.Players;
+
+            GameState gameState = new GameState
+            {
+                isPlayerOnesTurn = this.IsPlayerOnesTurn,
+                SelectedTheme = this.SelectedTheme,
+                Deck = jsonConvertableDeck,
+                Rows = this.Rows,
+                Collumns = this.Collumns,
+                Players = this.Players
+            };
+            return JsonConvert.SerializeObject(gameState, Formatting.Indented);
+        }
+
+        /// <summary>
+        /// Loads the content from the save file and applies it to the current game.
+        /// </summary>
+        private void ApplyStoredGameStateToCurrentGame()
+        {
+            string json = Files.GetFileContent(this.SaveGamePath);
+            //Deserialize the json
+            GameState gameState = JsonConvert.DeserializeObject<GameState>(json);
+            //For the next part we need to cast/convert all properties that are stored in our dyanmic list to the appropriate type
+            this.IsPlayerOnesTurn = gameState.isPlayerOnesTurn;
+            this.SelectedTheme = gameState.SelectedTheme;
+            this.Rows = gameState.Rows;
+            this.Collumns = gameState.Collumns;
+            this.Players = gameState.Players;
+
+            //It is important that we style our deck after we loaded in all the settings, otherwise we get a default 4*4 playing field
+            //even though the settings may state otherwise
+            List<CardPictureBoxJson> deck = new List<CardPictureBoxJson>();
+            deck = gameState.Deck;
+
+            foreach (CardPictureBoxJson jsonCard in deck)
+            {
+                CardNameAndImage pairNameAndImage = this.ThemeImages[this.SelectedTheme].Find(item => item.Name == jsonCard.PairName);
+                Card card = new Card()
+                {
+                    Name = jsonCard.Name,
+                    IsSolved = jsonCard.IsSolved,
+                    HasBeenVisible = jsonCard.HasBeenVisible,
+                    PairName = pairNameAndImage.Name,
+                    CardImage = pairNameAndImage.Resource,
+                };
+                //Check if the card is currently selected, if so add it to the selectedCards list.
+                if (jsonCard.IsSelected)
+                {
+                    this.SelectedCards.Add(card);
+                }
+                this.Deck.Add(card);
+            }
         }
 
         /// <summary>
@@ -266,58 +351,25 @@ namespace MemoryGame
         {
             if (loadFromSaveFile)
             {
-                //Since we are bypassing this.Populatedeck() we need to do some things again
-                //Create new empty lists for deck and selectedcards
-                this.Deck = new List<Card>();
-                this.SelectedCards = new List<Card>();
-                //Use a dynamic object for the next part, could also create a custom class for this
-                dynamic gameState = new System.Dynamic.ExpandoObject();
-                //Load the data from the savegamefile
-                string json = Files.GetFileContent(this.SaveGamePath);
-                //Deserialize the json
-                gameState = JsonConvert.DeserializeObject(json);
-                //For the next part we need to cast/convert all properties that are stored in our dyanmic list to the appropriate type
-                this.IsPlayerOnesTurn = (bool)gameState.IsPlayerOnesTurn;
-                this.SelectedTheme = (int)gameState.SelectedTheme;
-                this.Rows = (int)gameState.Rows;
-                this.Collumns = (int)gameState.Collumns;
-                this.Players = gameState.Players.ToObject<List<Player>>().ToArray(); //Seems dirty
+                this.CreateEmptyDeckAndSelectedCardsList();
+                this.ApplyStoredGameStateToCurrentGame();
                 this.Form1.Dispatcher.Invoke(() =>
                 {
-                    this.Form1.LabelPlayerOneScore.Content = $"{this.Players[0].Name} : {this.Players[0].ScoreBoard.Score}";
-                    this.Form1.LabelPlayerTwoScore.Content = $"{this.Players[1].Name} : {this.Players[1].ScoreBoard.Score}";
-                    this.Form1.LabelCurrentPlayer.Content = !this.IsPlayerOnesTurn ? $"Current player: {this.Players[0].Name}" : $"Current player: {this.Players[1].Name}";
+                    this.Form1.UpdateScoreBoardAndCurrentPlayer(this.Players[0], this.Players[1], this.IsPlayerOnesTurn);
+                    this.Form1.GeneratePlayingField();
                 });
-                //It is important that we style our deck after we loaded in all the settings, otherwise we get a default 4*4 playing field
-                //even though the settings may state otherwise
-                List<CardPictureBoxJson> deck = new List<CardPictureBoxJson>();
-                deck = gameState.Deck.ToObject<List<CardPictureBoxJson>>();
-
-                foreach (CardPictureBoxJson jsonCard in deck)
-                {
-                    CardNameAndImage pairNameAndImage = this.ThemeImages[this.SelectedTheme].Find(item => item.Name == jsonCard.PairName);
-                    Card card = new Card()
-                    {
-                        Name = jsonCard.Name,
-                        IsSolved = jsonCard.IsSolved,
-                        HasBeenVisible = jsonCard.HasBeenVisible,
-                        PairName = pairNameAndImage.Name,
-                        CardImage = pairNameAndImage.Resource,
-                    };
-                    //Check if the card is currently selected, if so add it to the selectedCards list.
-                    if (jsonCard.IsSelected)
-                    {
-                        this.SelectedCards.Add(card);
-                    }
-                    this.Deck.Add(card);
-                }
-                this.Form1.GeneratePlayingField();
             }
-            //Remove the savegame from the savefile to prevent abuse
-            Files.WriteToFile(this.SaveGamePath, "");
+            //Clear the current save file from data to prevent abuse
+            this.SaveCurrentGameStateToSaveFile("");
             this.HasUnfinishedGame = false;
             //Pass back control to the player
             this.GameIsFrozen = false;
+        }
+
+        private void CreateEmptyDeckAndSelectedCardsList()
+        {
+            this.Deck = new List<Card>();
+            this.SelectedCards = new List<Card>();
         }
 
         /// <summary>
@@ -327,10 +379,7 @@ namespace MemoryGame
         /// </summary>
         private void PopulateDeck()
         {
-            //this.ConfigurateDeckStyling();
-            this.Deck = new List<Card>();
-            this.SelectedCards = new List<Card>();
-
+            this.CreateEmptyDeckAndSelectedCardsList();
             for (int i = 0; i < (this.Rows * this.Collumns); i++)
             {
                 Card card = new Card()
@@ -339,11 +388,86 @@ namespace MemoryGame
                     PairName = this.ThemeImages[this.SelectedTheme][i].Name,
                     CardImage = this.ThemeImages[this.SelectedTheme][i].Resource
                 };
-
                 this.Deck.Add(card);
             }
-            //Randomize the location of the cards in the deck
+        }
+
+        /// <summary>
+        /// Shuffles the card in the deck to create a 'random' playing field
+        /// </summary>
+        private void ShuffleDeck()
+        {
             this.Deck.Shuffle();
+        }
+
+        private void SetMatchingPairToSolved()
+        {
+            foreach (Card card in this.SelectedCards)
+            {
+                //When we have a matching pair mark them as solved to take them out of the game
+                card.IsSolved = true;
+            }
+        }
+
+        /// <summary>
+        /// Increased the score of the current player
+        /// </summary>
+        private void AwardPlayerWithScore()
+        {
+            //Increment the score based on which player was playing
+            if (this.IsPlayerOnesTurn)
+                this.Players[0].ScoreBoard.IncreaseScore();
+            else
+                this.Players[1].ScoreBoard.IncreaseScore();
+        }
+
+        private void CheckAndHandlePlayerPunish()
+        {
+            //If there was no match and the card has previously been turned we want to punish the player
+            //Check if any of the Cards in the this.SelectedCards list have the boolean HasBeenVisible flipped
+            if (this.SelectedCards.FindIndex(c => c.HasBeenVisible == true) >= 0)
+            {
+                if (this.IsPlayerOnesTurn)
+                    this.Players[0].ScoreBoard.DecreaseScore();
+                else
+                    this.Players[1].ScoreBoard.DecreaseScore();
+            }
+        }
+
+        /// <summary>
+        /// Hides both card images after a player failed to make a match
+        /// </summary>
+        private void HideFailedMatchCardImage()
+        {
+            foreach (Card card in this.SelectedCards)
+            {
+                //Reset the cards to show no image and set the property to ensure that we know the card has been flipped before
+                card.Dispatcher.Invoke(() =>
+                {
+                    var imageSource = Memory.BitmapToImageSource(this.CardFrontSide[this.SelectedTheme]);
+                    var image = new System.Windows.Controls.Image()
+                    {
+                        Source = imageSource,
+                        Stretch = Stretch.Fill
+                    };
+                    card.Content = image;
+                });
+                card.HasBeenVisible = true;
+            }
+        }
+
+        /// <summary>
+        /// Checks if the game is finished or that the user can continue playing
+        /// </summary>
+        private void CheckEndGameConditions()
+        {
+            //Check if all cards are solved
+            if (this.Deck.FindAll(c => c.IsSolved == false).Count == 0)
+            {
+                Sound.StopBackGroundMusic();
+                Sound.PlayEffect(Resources.trumpets);
+                this.EndGame();
+            }
         }
 
         /// <summary>
@@ -359,65 +483,25 @@ namespace MemoryGame
             if (this.SelectedCards[0].PairName == this.SelectedCards[1].PairName)
             {
                 Sound.PlayEffect(Resources.correct);
-                foreach (Card card in this.SelectedCards)
-                {
-                    //When we have a matching pair mark them as solved to take them out of the game
-                    card.IsSolved = true;
-                }
-                //Increment the score based on which player was playing
-                if (this.IsPlayerOnesTurn)
-                    this.Players[0].ScoreBoard.IncreaseScore();
-                else
-                    this.Players[1].ScoreBoard.IncreaseScore();
+                this.SetMatchingPairToSolved();
+                this.AwardPlayerWithScore();
             }
             else
             {
                 Sound.PlayEffect(Resources.incorrect);
-                //If there was no match and the card has previously been turned we want to punish the player
-                //Check if any of the Cards in the this.SelectedCards list have the boolean HasBeenVisible flipped
-                if (this.SelectedCards.FindIndex(c => c.HasBeenVisible == true) >= 0)
-                {
-                    if (this.IsPlayerOnesTurn)
-                        this.Players[0].ScoreBoard.DecreaseScore();
-                    else
-                        this.Players[1].ScoreBoard.DecreaseScore();
-                }
-
-                foreach (Card card in this.SelectedCards)
-                {
-                    //Reset the cards to show no image and set the property to ensure that we know the card has been flipped before
-                    card.Dispatcher.Invoke(() =>
-                    {
-                        var imageSource = Memory.BitmapToImageSource(this.CardFrontSide[this.SelectedTheme]);
-                        var image = new System.Windows.Controls.Image()
-                        {
-                            Source = imageSource,
-                            Stretch = Stretch.Fill
-                        };
-                        card.Content = image;
-                    });
-                    card.HasBeenVisible = true;
-                }
+                this.CheckAndHandlePlayerPunish();
+                this.HideFailedMatchCardImage();
             }
-            //Update the scoreboard for both players
 
             this.Form1.Dispatcher.Invoke(() =>
             {
-                this.Form1.LabelPlayerOneScore.Content = $"{this.Players[0].Name} : {this.Players[0].ScoreBoard.Score}";
-                this.Form1.LabelPlayerTwoScore.Content = $"{this.Players[1].Name} : {this.Players[1].ScoreBoard.Score}";
-                this.Form1.LabelCurrentPlayer.Content = !this.IsPlayerOnesTurn ? $"Current player: {this.Players[0].Name}" : $"Current player: {this.Players[1].Name}";
+                this.Form1.UpdateScoreBoardAndCurrentPlayer(this.Players[0], this.Players[1], this.IsPlayerOnesTurn);
             });
 
             this.IsPlayerOnesTurn = !this.IsPlayerOnesTurn;
             this.SelectedCards.Clear();
             this.GameIsFrozen = false;
-            //Check if all cards are solved
-            if (this.Deck.FindAll(c => c.IsSolved == false).Count == 0)
-            {
-                Sound.StopBackGroundMusic();
-                Sound.PlayEffect(Resources.trumpets);
-                this.EndGame();
-            }
+            this.CheckEndGameConditions();
         }
 
         /// <summary>
@@ -437,6 +521,10 @@ namespace MemoryGame
         public void CardClicked(object sender, System.EventArgs e)
         {
             Card button = (Card)sender;
+            if (button == null)
+            {
+                return;
+            }
             Card selectedCard = this.Deck[Convert.ToInt32(button.Name.Substring(1))];
             //First check all the conditions on which we want to exit early
             if (this.GameIsFrozen || this.SelectedCards.Contains(selectedCard) || selectedCard.IsSolved)

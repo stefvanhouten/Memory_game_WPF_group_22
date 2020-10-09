@@ -9,7 +9,7 @@ namespace MemoryGame
     /// <summary>
     /// Template that the user can use to decide game size for their memory game
     /// </summary>
-    struct GameOptions
+    public class GameOptions
     {
         public string Name { get; set; }
         public int Rows { get; set; }
