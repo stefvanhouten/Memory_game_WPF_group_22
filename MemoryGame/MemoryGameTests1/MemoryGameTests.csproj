@@ -56,7 +56,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="memory game\GameOptionsTests.cs" />
     <Compile Include="memory game\MemoryTests.cs" />
+    <Compile Include="memory game\ScoreBoardTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

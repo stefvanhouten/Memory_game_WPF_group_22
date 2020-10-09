@@ -270,32 +270,19 @@ namespace MemoryGame
 
             foreach (Card card in this.Deck)
             {
-                jsonConvertableDeck.Add(new CardPictureBoxJson()
-                {
-                    Name = card.Name,
-                    IsSolved = card.IsSolved,
-                    PairName = card.PairName,
-                    HasBeenVisible = card.HasBeenVisible,
-                    IsSelected = this.SelectedCards.Any(c => c.Name == card.Name)
-                });
+                jsonConvertableDeck.Add(new CardPictureBoxJson(card.Name,
+                                                               card.PairName,
+                                                               card.IsSolved,
+                                                               card.HasBeenVisible,
+                                                               this.SelectedCards.Any(c => c.Name == card.Name)));
             }
 
-            //gameState.IsPlayerOnesTurn = this.IsPlayerOnesTurn;
-            //gameState.SelectedTheme = this.SelectedTheme;
-            //gameState.Deck = jsonConvertableDeck;
-            //gameState.Rows = this.Rows;
-            //gameState.Collumns = this.Collumns;
-            //gameState.Players = this.Players;
-
-            GameState gameState = new GameState
-            {
-                isPlayerOnesTurn = this.IsPlayerOnesTurn,
-                SelectedTheme = this.SelectedTheme,
-                Deck = jsonConvertableDeck,
-                Rows = this.Rows,
-                Collumns = this.Collumns,
-                Players = this.Players
-            };
+            GameState gameState = new GameState(this.IsPlayerOnesTurn,
+                                                this.SelectedTheme,
+                                                jsonConvertableDeck,
+                                                this.Rows,
+                                                this.Collumns,
+                                                this.Players);
             return JsonConvert.SerializeObject(gameState, Formatting.Indented);
         }
 
@@ -308,7 +295,7 @@ namespace MemoryGame
             //Deserialize the json
             GameState gameState = JsonConvert.DeserializeObject<GameState>(json);
             //For the next part we need to cast/convert all properties that are stored in our dyanmic list to the appropriate type
-            this.IsPlayerOnesTurn = gameState.isPlayerOnesTurn;
+            this.IsPlayerOnesTurn = gameState.IsPlayerOnesTurn;
             this.SelectedTheme = gameState.SelectedTheme;
             this.Rows = gameState.Rows;
             this.Collumns = gameState.Collumns;
@@ -322,13 +309,11 @@ namespace MemoryGame
             foreach (CardPictureBoxJson jsonCard in deck)
             {
                 CardNameAndImage pairNameAndImage = this.ThemeImages[this.SelectedTheme].Find(item => item.Name == jsonCard.PairName);
-                Card card = new Card()
+                Card card = new Card(pairNameAndImage.Name, pairNameAndImage.Resource)
                 {
                     Name = jsonCard.Name,
                     IsSolved = jsonCard.IsSolved,
-                    HasBeenVisible = jsonCard.HasBeenVisible,
-                    PairName = pairNameAndImage.Name,
-                    CardImage = pairNameAndImage.Resource,
+                    HasBeenVisible = jsonCard.HasBeenVisible
                 };
                 //Check if the card is currently selected, if so add it to the selectedCards list.
                 if (jsonCard.IsSelected)
@@ -379,11 +364,9 @@ namespace MemoryGame
             this.CreateEmptyDeckAndSelectedCardsList();
             for (int i = 0; i < (this.Rows * this.Collumns); i++)
             {
-                Card card = new Card()
+                Card card = new Card(this.ThemeImages[this.SelectedTheme][i].Name, this.ThemeImages[this.SelectedTheme][i].Resource)
                 {
                     Name = $"b{i}", //Could make a property that holds an int but we need to cast it to a string later on anyway
-                    PairName = this.ThemeImages[this.SelectedTheme][i].Name,
-                    CardImage = this.ThemeImages[this.SelectedTheme][i].Resource
                 };
                 this.Deck.Add(card);
             }
