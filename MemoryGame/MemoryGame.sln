@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryGame", "MemoryGame\MemoryGame.csproj", "{E504B708-4B54-4B07-AAD9-5E42D3949F75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryGameTests1", "MemoryGameTests1\MemoryGameTests1.csproj", "{69889D7E-F793-4A5F-ACBB-CD3311A520EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryGameTests", "MemoryGameTests1\MemoryGameTests.csproj", "{69889D7E-F793-4A5F-ACBB-CD3311A520EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
