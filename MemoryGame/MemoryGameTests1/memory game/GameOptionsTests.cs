@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 namespace MemoryGame.Tests
 {
     [TestClass()]
-    public class MemoryTests
+    public class GameOptionsTests
     {
         [TestMethod()]
-        public void MemoryTest()
+        public void CalculateCardsRequired()
         {
-            Assert.Fail();
+            GameOptions gameOptions = new GameOptions() { Columns = 4, Rows = 4, Name = "default 4x4" };
+            Assert.AreEqual(gameOptions.Columns * gameOptions.Rows, gameOptions.CardsRequired);
         }
     }
 }

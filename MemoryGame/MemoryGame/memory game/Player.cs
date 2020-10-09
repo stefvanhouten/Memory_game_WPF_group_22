@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MemoryGame
+﻿namespace MemoryGame
 {
     /// <summary>
     /// Base class for a player object in the memory game
