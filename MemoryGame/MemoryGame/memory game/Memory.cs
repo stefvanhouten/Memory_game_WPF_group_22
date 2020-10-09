@@ -162,7 +162,6 @@ namespace MemoryGame
         public Player[] Players { get; private set; } = new Player[2];
 
         public HighScore HighScores { get; private set; }
-        public Grid Panel { get; private set; }
         public MainWindow Form1 { get; private set; }
 
         public int SelectedTheme { get; set; }
@@ -170,10 +169,9 @@ namespace MemoryGame
         public int Collumns { get; set; } = 4;
 
 
-        public Memory(Grid panel, MainWindow form1)
+        public Memory(MainWindow form1)
         {
             this.Form1 = form1;
-            this.Panel = panel;
             this.HighScores = new HighScore();
             this.Theme.Add(new KeyValuePair<int, string>(0, "Animals"));
             this.Theme.Add(new KeyValuePair<int, string>(1, "Lord Of The Rings"));
@@ -182,7 +180,6 @@ namespace MemoryGame
             Files.Create(this.SaveGamePath);
             if (Files.GetFileContent(this.SaveGamePath).Length > 0)
                 this.HasUnfinishedGame = true;
-
         }
 
         /// <summary>

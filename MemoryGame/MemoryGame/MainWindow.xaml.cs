@@ -23,7 +23,7 @@ namespace MemoryGame
         public MainWindow()
         {
             InitializeComponent();
-            this.game = new Memory(MemoryGrid, this);
+            this.game = new Memory(this);
             this.RenderBackgroundForTabs();
             this.GenerateThemeSelectionCheckboxes();
         }
