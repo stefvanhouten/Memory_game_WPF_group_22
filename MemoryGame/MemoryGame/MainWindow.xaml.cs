@@ -23,7 +23,7 @@ namespace MemoryGame
         public MainWindow()
         {
             InitializeComponent();
-            this.game = new Memory(MemoryGrid, this);
+            this.game = new Memory(this);
             this.RenderBackgroundForTabs();
             this.GenerateThemeSelectionCheckboxes();
         }
@@ -41,15 +41,17 @@ namespace MemoryGame
             int i = 0;
             foreach (KeyValuePair<int, string> theme in this.game.Theme)
             {
-                CheckBox checkBox = new CheckBox();
+                CheckBox checkBox = new CheckBox()
+                {
+                    Name = $"b{theme.Key}",
+                    Content = theme.Value,
+                    Margin = new Thickness(5, 40 + i * 20, 0, 0)
+                };
                 if (i == this.game.SelectedTheme)
                 {
                     checkBox.IsChecked = true;
                     this.lastChecked = checkBox;
                 }
-                checkBox.Name = $"b{theme.Key}";
-                checkBox.Content = theme.Value;
-                checkBox.Margin = new Thickness(5, 40 + i * 20, 0, 0);
                 checkBox.Click += CheckBox_Click;
                 ThemeGrid.Children.Add(checkBox);
                 Grid.SetRow(checkBox, 0);
@@ -81,9 +83,11 @@ namespace MemoryGame
 
         private void RenderBackgroundForTabs()
         {
-            ImageBrush background = new ImageBrush();
-            background.ImageSource = this.game.BitmapToImageSource(this.game.BackgroundTheme[this.game.SelectedTheme]);
-            background.Opacity = 0.3;
+            ImageBrush background = new ImageBrush()
+            {
+                ImageSource = Memory.BitmapToImageSource(this.game.BackgroundTheme[this.game.SelectedTheme]),
+                Opacity = 0.5
+            };
             this.HomeGrid.Background = background;
             this.ThemeGrid.Background = background;
             this.MemoryGrid.Background = background;
@@ -170,13 +174,15 @@ namespace MemoryGame
                 for (int x = 0; x < this.game.Collumns; x++)
                 {
                     Card cardBtn = this.game.Deck[index];
-                    var image = new System.Windows.Controls.Image();
-                    image.Stretch = Stretch.Fill;
-                    image.Source = this.game.BitmapToImageSource(this.game.CardFrontSide[this.game.SelectedTheme]);
+                    var image = new System.Windows.Controls.Image() { 
+                        Stretch = Stretch.Fill, 
+                        Source = Memory.BitmapToImageSource(this.game.CardFrontSide[this.game.SelectedTheme]) 
+                    };
+
                     if (cardBtn.IsSolved || this.game.SelectedCards.Contains(cardBtn))
                     {
                         int position = this.game.ThemeImages[this.game.SelectedTheme].FindIndex(c => c.Name == cardBtn.PairName);
-                        var imageSource = this.game.BitmapToImageSource(this.game.ThemeImages[this.game.SelectedTheme][position].Resource);
+                        var imageSource = Memory.BitmapToImageSource(this.game.ThemeImages[this.game.SelectedTheme][position].Resource);
                         image.Source = imageSource;
                     }
 
@@ -190,6 +196,25 @@ namespace MemoryGame
                     index++;
                 }
             }
+        }
+
+        public void CleanupAfterGame()
+        {
+            this.InputPlayer1.Text = "";
+            this.InputPlayer2.Text = "";
+            this.NavigateToHighScores();
+            this.ClearPanels();
+        }
+
+        public void UpdateScoreBoardAndCurrentPlayer(Player playerOne, Player playerTwo, bool isPlayerOnesTurn)
+        {
+            if(playerOne != null && playerTwo != null)
+            {
+                this.LabelPlayerOneScore.Content = $"{playerOne.Name} : {playerOne.ScoreBoard.Score}";
+                this.LabelPlayerTwoScore.Content = $"{playerTwo.Name} : {playerTwo.ScoreBoard.Score}";
+                this.LabelCurrentPlayer.Content = !isPlayerOnesTurn ? $"Current player: {playerOne.Name}" : $"Current player: {playerTwo.Name}";
+            }
+
         }
 
         public void PauseResumeMemory(object sender, RoutedEventArgs e)
@@ -265,7 +290,7 @@ namespace MemoryGame
 
         public void NavigateHighScores(object sender, EventArgs e)
         {
-            TabHighScores.IsSelected = true;
+            this.NavigateToHighScores();
         }
 
         public void NavigateThemeSelection(object sender, EventArgs e)

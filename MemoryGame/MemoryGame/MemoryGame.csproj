@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeQuality.Analyzers.3.3.0\build\Microsoft.CodeQuality.Analyzers.props" Condition="Exists('..\packages\Microsoft.CodeQuality.Analyzers.3.3.0\build\Microsoft.CodeQuality.Analyzers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,6 +15,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -63,10 +66,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Sound.cs" />
-    <Compile Include="LoopStream.cs" />
+    <Compile Include="memory game\CardPictureBoxJson.cs" />
+    <Compile Include="memory game\GameState.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="sounds\Sound.cs" />
+    <Compile Include="sounds\LoopStream.cs" />
     <Compile Include="MyExtensions.cs" />
-    <Compile Include="ScoreBoard.cs" />
+    <Compile Include="memory game\ScoreBoard.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -75,28 +85,23 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CardNameAndImage.cs" />
-    <Compile Include="Card.cs" />
-    <Compile Include="Dir.cs" />
+    <Compile Include="memory game\CardNameAndImage.cs" />
+    <Compile Include="memory game\Card.cs" />
+    <Compile Include="file handlers\Dir.cs" />
     <Compile Include="Encryptor.cs" />
-    <Compile Include="Files.cs" />
-    <Compile Include="GameOptions.cs" />
-    <Compile Include="HighScore.cs" />
+    <Compile Include="file handlers\Files.cs" />
+    <Compile Include="memory game\GameOptions.cs" />
+    <Compile Include="memory game\HighScore.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Memory.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="memory game\Memory.cs" />
+    <Compile Include="memory game\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -106,6 +111,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="images\LOTR\lotr.webp" />
     <None Include="packages.config" />
@@ -116,24 +122,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\Animals\banana.png" />
-    <Resource Include="images\Animals\book.png" />
-    <Resource Include="images\Animals\bug.png" />
-    <Resource Include="images\Animals\car.png" />
-    <Resource Include="images\Animals\monkey.png" />
-    <Resource Include="images\Animals\tornado.png" />
-    <Resource Include="images\Animals\tree.png" />
-    <Resource Include="images\Animals\wine.png" />
-    <Resource Include="images\LOTR\BadBoi.jpg" />
-    <Resource Include="images\LOTR\Ent.jpg" />
-    <Resource Include="images\LOTR\Frodo.png" />
-    <Resource Include="images\LOTR\Gandalf.jpg" />
-    <Resource Include="images\LOTR\ring.png" />
-    <Resource Include="images\LOTR\Smeegle.jpg" />
-    <Resource Include="images\LOTR\SomeDwarf.jpg" />
-    <Resource Include="images\LOTR\SwordWieldingLotrGuy.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="images\Animals\frontside.jpg" />
@@ -156,5 +144,172 @@
   <ItemGroup>
     <None Include="sounds\effects\incorrect.mp3" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.3.3.0\analyzers\dotnet\cs\Humanizer.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.3.3.0\analyzers\dotnet\cs\Microsoft.CodeQuality.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.3.3.0\analyzers\dotnet\cs\Microsoft.CodeQuality.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\aussie.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\black wolf.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\cavia.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\cheetah.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\deer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\egel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\elephant.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\giraffe.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\gorilla.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\horse.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\monkey.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\oerangutan.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\orca.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\parrot.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\penguin.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\polar bear.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\rabbit.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\red canary.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\red panda.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\rhino.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\seal.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\shark.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\sloth.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\tiger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\turtle.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\ugly fish.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\aragorn.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\argonath.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\boromir.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\elrond.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\eomer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\Eowyn.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\faramir.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\frodo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\Galadriel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\gimli.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\gollum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\gothmog.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\high elves.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\legolas.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\lotrBackground.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\merry pippin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\one ring.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\ranger.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\samwise.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\smaug.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\tauriel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\thranduil.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\treebeard.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\troll.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\LOTR\witch king.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\LOTR\Gandalf.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeQuality.Analyzers.3.3.0\build\Microsoft.CodeQuality.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeQuality.Analyzers.3.3.0\build\Microsoft.CodeQuality.Analyzers.props'))" />
+  </Target>
 </Project>

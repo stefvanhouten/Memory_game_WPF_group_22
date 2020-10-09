@@ -27,8 +27,8 @@ namespace Security
             using (RijndaelManaged rijAlg = new RijndaelManaged())
             {
                 // Create an encryptor to perform the stream transform
+                rijAlg.Padding = PaddingMode.PKCS7;
                 ICryptoTransform encryptor = rijAlg.CreateEncryptor(KEY, IV);
-
                 // Create the streams used for encryption
                 using (MemoryStream msEncrypt = new MemoryStream())
                 {
@@ -47,14 +47,15 @@ namespace Security
             return encrypted;
         }
 
-        public static string Decrypt(byte[] inputBytes)
+        public static string Decrypt(string inputString)
         {
             // Will contain the decrypted value later
             string decrypted = null;
-
+            byte[] inputBytes = Convert.FromBase64String(inputString);
             // Gets the input string and converts it to a byte array
             using (RijndaelManaged rijAlg = new RijndaelManaged())
             {
+                rijAlg.Padding = PaddingMode.PKCS7;
                 // Create a decryptor to perform the stream transform
                 ICryptoTransform decryptor = rijAlg.CreateDecryptor(KEY, IV);
 
