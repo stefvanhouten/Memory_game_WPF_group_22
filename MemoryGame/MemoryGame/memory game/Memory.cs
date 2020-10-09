@@ -6,7 +6,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -17,7 +16,6 @@ namespace MemoryGame
     /// </summary>
     public class Memory
     {
-        private bool IsPlayerOnesTurn { get; set; } = true;
         private readonly string SaveGamePath = Path.Combine(Directory.GetCurrentDirectory(), "savegame.txt");
 
         #region Large dictionary containing card images and card names
@@ -148,6 +146,7 @@ namespace MemoryGame
 
         public bool GameIsFrozen { get; private set; }
         public bool HasUnfinishedGame { get; private set; }
+        public bool IsPlayerOnesTurn { get; private set; } = true;
 
         public List<Card> Deck { get; private set; }
         public List<Card> SelectedCards { get; private set; } //Holds 2 cards that currently are selected
@@ -337,7 +336,7 @@ namespace MemoryGame
                 this.ApplyStoredGameStateToCurrentGame();
                 this.Form1.Dispatcher.Invoke(() =>
                 {
-                    this.Form1.UpdateScoreBoardAndCurrentPlayer(this.Players[0], this.Players[1], this.IsPlayerOnesTurn);
+                    this.Form1.UpdateScoreBoardAndCurrentPlayer(this.Players[0], this.Players[1]);
                     this.Form1.GeneratePlayingField();
                 });
             }
@@ -475,7 +474,7 @@ namespace MemoryGame
 
             this.Form1.Dispatcher.Invoke(() =>
             {
-                this.Form1.UpdateScoreBoardAndCurrentPlayer(this.Players[0], this.Players[1], this.IsPlayerOnesTurn);
+                this.Form1.UpdateScoreBoardAndCurrentPlayer(this.Players[0], this.Players[1]);
             });
 
             this.IsPlayerOnesTurn = !this.IsPlayerOnesTurn;
@@ -498,7 +497,7 @@ namespace MemoryGame
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void CardClicked(object sender, System.EventArgs e)
+        public void CardClicked(object sender, EventArgs e)
         {
             Card button = (Card)sender;
             if (button == null)

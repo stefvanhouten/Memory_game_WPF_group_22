@@ -8,7 +8,11 @@
         public bool HasBeenVisible { get; private set; }
         public bool IsSelected { get; private set; }
 
-        public CardPictureBoxJson(string name, string pairName, bool isSolved, bool hasBeenVisible, bool isSelected)
+        public CardPictureBoxJson(string name,
+                                  string pairName,
+                                  bool isSolved,
+                                  bool hasBeenVisible,
+                                  bool isSelected)
         {
             this.Name = name;
             this.PairName = pairName;

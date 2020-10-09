@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MemoryGame
 {
@@ -15,7 +11,12 @@ namespace MemoryGame
         public int Collumns { get; private set; }
         public Player[] Players { get; private set; }
 
-        public GameState(bool isPlayerOnesTurn, int selectedTheme, List<CardPictureBoxJson> deck, int rows, int collumns, Player[] players)
+        public GameState(bool isPlayerOnesTurn,
+                         int selectedTheme,
+                         List<CardPictureBoxJson> deck,
+                         int rows,
+                         int collumns,
+                         Player[] players)
         {
             this.IsPlayerOnesTurn = isPlayerOnesTurn;
             this.SelectedTheme = selectedTheme;
