@@ -12,7 +12,9 @@ namespace MemoryGame
     public class ScoreBoard
     {
         public int Score { get; private set; }
-        private int RemoveFromScore { get; set; } = 2;
+        public int RemoveFromScore { get; } = 4;
+        public int IncreaseScoreWith { get; } = 10;
+
 
         public ScoreBoard()
         {
@@ -28,7 +30,7 @@ namespace MemoryGame
              * 
              * Methods are already attached and the score will be updated in the game if you make it work :D
              */
-            this.Score += 5;
+            this.Score += this.IncreaseScoreWith;
         }
 
         public void DecreaseScore()
