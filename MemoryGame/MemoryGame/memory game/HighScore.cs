@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using Security;
+using System.Linq;
 
 namespace MemoryGame
 {
@@ -134,16 +135,23 @@ namespace MemoryGame
             return this.HighScores;
         }
 
-        public HighScoreListing[] Limit(int limit)
+        public List<HighScoreListing> Limit(int limit)
         {
-            //create an array with a limit
-            HighScoreListing[] limitedHighScores = new HighScoreListing[limit];
-            
-            //copy the array to your desired limit
-            this.HighScores.CopyTo(limitedHighScores, limit);
+            //create an List with a limit
+            List<HighScoreListing> LimitedHighScores = new List<HighScoreListing>();
 
-            //return the array and read it out to board
-            return limitedHighScores;
+            if (limit > this.HighScores.Count)
+            {
+                LimitedHighScores = this.HighScores;
+
+                return LimitedHighScores;
+            }
+
+            //copy the List to your desired limit
+            LimitedHighScores = this.HighScores.Take(limit).ToList();
+
+            //return the List and read it out to board
+            return LimitedHighScores;
         }
     }
 }
