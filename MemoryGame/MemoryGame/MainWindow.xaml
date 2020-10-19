@@ -8,7 +8,7 @@
         UseLayoutRounding="True"
         Title="Memory game" Height="450" Width="800" MinHeight="450" MinWidth="800" ResizeMode="CanResize">
     <DockPanel>
-        <TabControl x:Name="TabControlNavigator"  Visibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+        <TabControl x:Name="TabControlNavigator"  Visibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled" SelectionChanged="TabControlNavigator_SelectionChanged">
             <TabItem x:Name="TabHome" Header="Home" Visibility="Collapsed">
                 <Grid x:Name="HomeGrid">
                     <Grid.ColumnDefinitions>
@@ -20,10 +20,12 @@
                         <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Button x:Name="ButtonStartGame" Content="Play game" VerticalAlignment="Stretch" Margin="0, 5, 0, 0" Grid.Column="1" Grid.Row="0"    Click="NavigatePreGame"/>
                     <Button x:Name="ButtonSelectTheme" Content="Select theme" VerticalAlignment="Stretch" Margin="0, 5, 0, 0" Grid.Column="1" Grid.Row="1"   Click="NavigateThemeSelection"/>
                     <Button x:Name="ButtonHighScores" Content="Highscores" VerticalAlignment="Stretch" Margin="0, 5, 0, 0"  Grid.Column="1"  Grid.Row="2"   Click="NavigateHighScores"/>
+                    <Button x:Name="ButtonMultiplayer" Content="Multiplayer" VerticalAlignment="Stretch" Margin="0, 5, 0, 0"  Grid.Column="1"  Grid.Row="3"   Click="NavigateMultiplayer"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="TabHighScores" Header="HighScore" Visibility="Collapsed">
@@ -57,7 +59,22 @@
                     <Button x:Name="ButtonHomeTheme" Grid.Column="0" Grid.Row="1" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="30"/>
                     <Label Content="Select theme&#xD;&#xA;" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" FontWeight="Bold" FontSize="18" Height="30"/>
                 </Grid>
-
+            </TabItem>
+            <TabItem x:Name="TabMultiplayer" Header="Multiplayer" Visibility="Collapsed">
+                <Grid x:Name="MultiplayerGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition>
+                            
+                        </RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="ConnectionId:" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                    <TextBlock Text="Not Connected" Margin="94,16,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="ButtonHomeMultiplayer" Grid.Column="0" Grid.Row="1" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="30"/>
+                </Grid>
             </TabItem>
             <TabItem x:Name="TabPreGame" Header="TabPreGame" Visibility="Collapsed">
                 <Grid x:Name="PreGameGrid">

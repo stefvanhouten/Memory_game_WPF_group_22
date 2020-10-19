@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MemoryGame.multiplayer;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -89,6 +90,7 @@ namespace MemoryGame
             this.MemoryGrid.Background = background;
             this.PreGameGrid.Background = background;
             this.HighScoresDataGrid.Background = background;
+            this.MultiplayerGrid.Background = background;
         }
 
         public void ShowLoadGameCheckbox()
@@ -292,6 +294,16 @@ namespace MemoryGame
         public void NavigateThemeSelection(object sender, EventArgs e)
         {
             TabThemeSelection.IsSelected = true;
+        }
+
+        public void NavigateMultiplayer(object sender, EventArgs e)
+        {
+            TabMultiplayer.IsSelected = true;
+        }
+
+        private void TabControlNavigator_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 
