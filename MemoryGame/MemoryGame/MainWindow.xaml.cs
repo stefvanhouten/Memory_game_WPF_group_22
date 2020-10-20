@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace MemoryGame
 {
@@ -23,7 +19,7 @@ namespace MemoryGame
         public MainWindow()
         {
             InitializeComponent();
-            this.game = new Memory(MemoryGrid, this);
+            this.game = new Memory(this);
             this.RenderBackgroundForTabs();
             this.GenerateThemeSelectionCheckboxes();
         }
@@ -206,13 +202,13 @@ namespace MemoryGame
             this.ClearPanels();
         }
 
-        public void UpdateScoreBoardAndCurrentPlayer(Player playerOne, Player playerTwo, bool isPlayerOnesTurn)
+        public void UpdateScoreBoardAndCurrentPlayer(Player playerOne, Player playerTwo)
         {
             if(playerOne != null && playerTwo != null)
             {
                 this.LabelPlayerOneScore.Content = $"{playerOne.Name} : {playerOne.ScoreBoard.Score}";
                 this.LabelPlayerTwoScore.Content = $"{playerTwo.Name} : {playerTwo.ScoreBoard.Score}";
-                this.LabelCurrentPlayer.Content = !isPlayerOnesTurn ? $"Current player: {playerOne.Name}" : $"Current player: {playerTwo.Name}";
+                this.LabelCurrentPlayer.Content = !this.game.IsPlayerOnesTurn ? $"Current player: {playerOne.Name}" : $"Current player: {playerTwo.Name}";
             }
 
         }

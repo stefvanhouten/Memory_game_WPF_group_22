@@ -107,9 +107,9 @@
     </Compile>
     <Compile Include="memory game\CardNameAndImage.cs" />
     <Compile Include="memory game\Card.cs" />
-    <Compile Include="Dir.cs" />
+    <Compile Include="file handlers\Dir.cs" />
     <Compile Include="Encryptor.cs" />
-    <Compile Include="Files.cs" />
+    <Compile Include="file handlers\Files.cs" />
     <Compile Include="memory game\GameOptions.cs" />
     <Compile Include="memory game\HighScore.cs" />
     <Compile Include="MainWindow.xaml.cs">

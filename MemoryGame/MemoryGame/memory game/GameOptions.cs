@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MemoryGame
+﻿namespace MemoryGame
 {
     /// <summary>
     /// Template that the user can use to decide game size for their memory game

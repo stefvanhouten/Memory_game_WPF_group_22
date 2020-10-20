@@ -34,7 +34,7 @@ namespace MemoryGame
     /// </summary>
     public class HighScore
     {
-        public List<HighScoreListing> HighScores { get; set; }
+        public List<HighScoreListing> HighScores { get; private set; }
         private readonly string HighScorespath = Path.Combine(Directory.GetCurrentDirectory(), "highscores.txt");
 
         public HighScore()
