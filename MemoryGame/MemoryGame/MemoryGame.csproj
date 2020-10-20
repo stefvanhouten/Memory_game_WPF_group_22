@@ -325,6 +325,69 @@
   <ItemGroup>
     <Resource Include="images\LOTR\Gandalf.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\BB8.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\chewbacca.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\Darth Vader.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\Finn.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\jar jar binks.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\kylo ren.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\Luke Skywalker.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\mandalorian.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\maz kanata.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\obi wan kenobi.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\Poe.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\r2d2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\sebulba.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\Snoke.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\star wars logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\x wing.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Starwars\yoda.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\fangtooth.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\hamster.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\jan van gent.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\Animals\piranha.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

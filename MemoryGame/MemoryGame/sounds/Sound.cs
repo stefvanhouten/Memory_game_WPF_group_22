@@ -41,6 +41,11 @@ namespace MemoryGame
                     // LOTR theme song
                     audioStream = ByteArrayToStream(Resources.lotrtrack);
                     break;
+                case 2:
+                    // Starwars theme song
+                    audioStream = ByteArrayToStream(Resources.lotrtrack);
+                    break;
+
             }
 
             WaveStream mainOutputStream = new Mp3FileReader(audioStream);
