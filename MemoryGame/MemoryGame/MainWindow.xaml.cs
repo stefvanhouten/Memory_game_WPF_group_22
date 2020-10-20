@@ -280,7 +280,7 @@ namespace MemoryGame
         public void NavigateToHighScores()
         {
             ObservableCollection<HighScoreListing> oc = new ObservableCollection<HighScoreListing>();
-            foreach (HighScoreListing item in this.game.HighScores.HighScores)
+            foreach (HighScoreListing item in this.game.HighScores.Limit(15))
             {
                 oc.Add(item);
             }
