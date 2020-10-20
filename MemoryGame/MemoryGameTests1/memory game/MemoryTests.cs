@@ -8,64 +8,64 @@ namespace MemoryGame.Tests
     {
         private const string PlayerOne = "p1";
         private const string PlayerTwo = "p2";
+        public static MainWindow Form1 = new MainWindow();
+        public static Memory MemoryGame = new Memory(Form1);
 
         [TestMethod()]
         public void ValidateDefault4x4Grid()
         {
-            MainWindow form1 = new MainWindow();
-            Memory memory = new Memory(form1);
-            memory.SelectedTheme = 1;
-            memory.StartGame();
+            MemoryGame.SelectedTheme = 1;
+            MemoryGame.AddPlayers(PlayerOne, PlayerTwo);
+            MemoryGame.StartGame();
             Sound.StopBackGroundMusic();
-
-            Assert.AreEqual(memory.Rows
-                            * memory.Collumns, memory.Deck.Count);
+            Assert.AreEqual(MemoryGame.Rows
+                            * MemoryGame.Collumns, MemoryGame.Deck.Count);
+            MemoryGame.EndGame();
         }
 
         [TestMethod()]
         public void Validate2x2Grid()
         {
-            MainWindow form1 = new MainWindow();
-            Memory memory = new Memory(form1);
-            memory.Rows = memory.Collumns = 2;
-            memory.StartGame();
+            MemoryGame.Rows = MemoryGame.Collumns = 2;
+            MemoryGame.AddPlayers(PlayerOne, PlayerTwo);
+            MemoryGame.StartGame();
             Sound.StopBackGroundMusic();
 
-            Assert.AreEqual(memory.Rows
-                            * memory.Collumns, memory.Deck.Count);
+            Assert.AreEqual(MemoryGame.Rows
+                            * MemoryGame.Collumns, MemoryGame.Deck.Count);
+            MemoryGame.EndGame();
+
         }
 
         [TestMethod()]
         public void Validate4x5Grid()
         {
-            MainWindow form1 = new MainWindow();
-            Memory memory = new Memory(form1);
-            memory.Rows = 4;
-            memory.Collumns = 5;
-            memory.StartGame();
+            MemoryGame.Rows = 4;
+            MemoryGame.Collumns = 5;
+            MemoryGame.AddPlayers(PlayerOne, PlayerTwo);
+            MemoryGame.StartGame();
             Sound.StopBackGroundMusic();
 
-            Assert.AreEqual(memory.Rows
-                            * memory.Collumns, memory.Deck.Count);
+            Assert.AreEqual(MemoryGame.Rows
+                            * MemoryGame.Collumns, MemoryGame.Deck.Count);
+            MemoryGame.EndGame();
         }
 
         [TestMethod()]
         public void DeckIsRandom()
         {
-            MainWindow form1 = new MainWindow();
-            Memory memory = new Memory(form1);
             List<Card> deck1, deck2;
 
-            memory.AddPlayers(PlayerOne, PlayerTwo);
-            memory.StartGame();
-            deck1 = memory.Deck;
+            MemoryGame.AddPlayers(PlayerOne, PlayerTwo);
+            MemoryGame.StartGame();
+            deck1 = MemoryGame.Deck;
             Sound.StopBackGroundMusic();
-            memory.EndGame();
+            MemoryGame.EndGame();
 
-            memory.AddPlayers(PlayerOne, PlayerTwo);
-            memory.StartGame();
-            deck2 = memory.Deck;
-            memory.EndGame();
+            MemoryGame.AddPlayers(PlayerOne, PlayerTwo);
+            MemoryGame.StartGame();
+            deck2 = MemoryGame.Deck;
+            MemoryGame.EndGame();
             Sound.StopBackGroundMusic();
 
             Assert.AreNotEqual<List<Card>>(deck1, deck2);
@@ -74,12 +74,10 @@ namespace MemoryGame.Tests
         [TestMethod()]
         public void BothPlayersAdded()
         {
-            MainWindow form1 = new MainWindow();
-            Memory memory = new Memory(form1);
-            memory.AddPlayers(PlayerOne, PlayerTwo);
+            MemoryGame.AddPlayers(PlayerOne, PlayerTwo);
 
-            Player playerOne = memory.Players[0];
-            Player playerTwo = memory.Players[1];
+            Player playerOne = MemoryGame.Players[0];
+            Player playerTwo = MemoryGame.Players[1];
 
             Assert.IsTrue(string.Equals(playerOne.Name,
                                         PlayerOne) && string.Equals(playerTwo.Name, PlayerTwo));

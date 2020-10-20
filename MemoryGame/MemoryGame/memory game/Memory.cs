@@ -75,6 +75,14 @@ namespace MemoryGame
                     new CardNameAndImage() { Name = "turtle", Resource = Resources.turtle },
                     new CardNameAndImage() { Name = "ugly fish", Resource = Resources.ugly_fish },
                     new CardNameAndImage() { Name = "ugly fish", Resource = Resources.ugly_fish },
+                    new CardNameAndImage() { Name = "jan_van_gent", Resource = Resources.jan_van_gent },
+                    new CardNameAndImage() { Name = "jan_van_gent", Resource = Resources.jan_van_gent },
+                    new CardNameAndImage() { Name = "hamster", Resource = Resources.hamster },
+                    new CardNameAndImage() { Name = "hamster", Resource = Resources.hamster },
+                    new CardNameAndImage() { Name = "fangtooth", Resource = Resources.fangtooth },
+                    new CardNameAndImage() { Name = "fangtooth", Resource = Resources.fangtooth },
+                    new CardNameAndImage() { Name = "piranha", Resource = Resources.piranha },
+                    new CardNameAndImage() { Name = "piranha", Resource = Resources.piranha },
                 }
             },
             { 1, new List<CardNameAndImage>()
@@ -129,18 +137,58 @@ namespace MemoryGame
                     new CardNameAndImage() { Name = "witch king", Resource = Resources.witch_king }
                 }
             },
+            { 2, new List<CardNameAndImage>()
+                {
+                    new CardNameAndImage() { Name = "BB8", Resource = Resources.BB8 },
+                    new CardNameAndImage() { Name = "BB8", Resource = Resources.BB8 },
+                    new CardNameAndImage() { Name = "chewbacca", Resource = Resources.chewbacca },
+                    new CardNameAndImage() { Name = "chewbacca", Resource = Resources.chewbacca },
+                    new CardNameAndImage() { Name = "Darth_Vader", Resource = Resources.Darth_Vader },
+                    new CardNameAndImage() { Name = "Darth_Vader", Resource = Resources.Darth_Vader },
+                    new CardNameAndImage() { Name = "Finn", Resource = Resources.Finn },
+                    new CardNameAndImage() { Name = "Finn", Resource = Resources.Finn },
+                    new CardNameAndImage() { Name = "jar_jar_binks", Resource = Resources.jar_jar_binks },
+                    new CardNameAndImage() { Name = "jar_jar_binks", Resource = Resources.jar_jar_binks },
+                    new CardNameAndImage() { Name = "kylo_ren", Resource = Resources.kylo_ren },
+                    new CardNameAndImage() { Name = "kylo_ren", Resource = Resources.kylo_ren },
+                    new CardNameAndImage() { Name = "Luke_Skywalker", Resource = Resources.Luke_Skywalker },
+                    new CardNameAndImage() { Name = "Luke_Skywalker", Resource = Resources.Luke_Skywalker },
+                    new CardNameAndImage() { Name = "mandalorian", Resource = Resources.mandalorian },
+                    new CardNameAndImage() { Name = "mandalorian", Resource = Resources.mandalorian },
+                    new CardNameAndImage() { Name = "maz_kanata", Resource = Resources.maz_kanata },
+                    new CardNameAndImage() { Name = "maz_kanata", Resource = Resources.maz_kanata },
+                    new CardNameAndImage() { Name = "obi_wan_kenobi", Resource = Resources.obi_wan_kenobi },
+                    new CardNameAndImage() { Name = "obi_wan_kenobi", Resource = Resources.obi_wan_kenobi },
+                    new CardNameAndImage() { Name = "poe", Resource = Resources.Poe },
+                    new CardNameAndImage() { Name = "poe", Resource = Resources.Poe },
+                    new CardNameAndImage() { Name = "r2d2", Resource = Resources.r2d2 },
+                    new CardNameAndImage() { Name = "r2d2", Resource = Resources.r2d2 },
+                    new CardNameAndImage() { Name = "sebulba", Resource = Resources.sebulba },
+                    new CardNameAndImage() { Name = "sebulba", Resource = Resources.sebulba },
+                    new CardNameAndImage() { Name = "Snoke", Resource = Resources.Snoke },
+                    new CardNameAndImage() { Name = "Snoke", Resource = Resources.Snoke },
+                    new CardNameAndImage() { Name = "x_wing", Resource = Resources.x_wing },
+                    new CardNameAndImage() { Name = "x_wing", Resource = Resources.x_wing },
+                    new CardNameAndImage() { Name = "yoda", Resource = Resources.yoda },
+                    new CardNameAndImage() { Name = "yoda", Resource = Resources.yoda },
+
+
+                }
+            },
 
         };
         public Dictionary<int, Bitmap> CardFrontSide { get; private set; } = new Dictionary<int, Bitmap>()
         {
             { 0,  Resources.frontside },
             { 1,  Resources.lotr },
+            { 2,  Resources.star_wars_logo },
         };
 
         public Dictionary<int, Bitmap> BackgroundTheme { get; private set; } = new Dictionary<int, Bitmap>()
         {
             { 0,  Resources.frontside },
             { 1,  Resources.lotr },
+            { 2,  Resources.star_wars_logo },
         };
         #endregion
 
@@ -174,6 +222,7 @@ namespace MemoryGame
             this.HighScores = new HighScore();
             this.Theme.Add(new KeyValuePair<int, string>(0, "Animals"));
             this.Theme.Add(new KeyValuePair<int, string>(1, "Lord Of The Rings"));
+            this.Theme.Add(new KeyValuePair<int, string>(2, "Starwars"));
 
             //Check if there is a savefile that isn't empty
             Files.Create(this.SaveGamePath);
@@ -221,7 +270,7 @@ namespace MemoryGame
         /// <returns>Integer total amount of cards</returns>
         public int TotalCardsInCurrentTheme()
         {
-            return this.ThemeImages[this.SelectedTheme].Count;
+            return this.ThemeImages[this.SelectedTheme].Count / 2;
         }
 
 
