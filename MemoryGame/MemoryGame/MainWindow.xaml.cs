@@ -213,6 +213,11 @@ namespace MemoryGame
 
         }
 
+        public void ResetMemory(object sender, RoutedEventArgs e)
+        {
+            this.game.ResetGame();
+        }
+
         public void PauseResumeMemory(object sender, RoutedEventArgs e)
         {
             if(this.PauseResumeBtn.Content.ToString().Contains("Pause"))

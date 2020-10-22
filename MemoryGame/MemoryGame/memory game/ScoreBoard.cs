@@ -16,6 +16,11 @@
              *  In our case this happends when we start a new memory game, just after the players provided their names.
              */
         }
+        
+        public void ResetScore()
+        {
+            this.Score = 0;
+        }
 
         public void IncreaseScore()
         {

@@ -252,6 +252,29 @@ namespace MemoryGame
                 this.Form1.CleanupAfterGame();
             });
         }
+        /// <summary>
+        /// Resets the memory game
+        /// </summary>
+        public void ResetGame()
+        {
+            this.GameIsFrozen = true;
+            this.Form1.Dispatcher.Invoke(() =>
+            {
+                this.Form1.ClearPanels();
+                this.PopulateDeck();
+                foreach (Player player in this.Players)
+                {
+                    player.ScoreBoard.ResetScore();
+                }
+                this.Form1.Dispatcher.Invoke(() =>
+                {
+                    this.Form1.UpdateScoreBoardAndCurrentPlayer(this.Players[0], this.Players[1]);
+                });
+                this.ShuffleDeck();
+                this.Form1.GeneratePlayingField();
+            });
+            this.GameIsFrozen = false;
+        }
 
         /// <summary>
         /// Creates two instances of the Player class and gives them the user chosen names.
