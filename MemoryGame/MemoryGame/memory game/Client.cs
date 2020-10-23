@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MemoryGame.multiplayer
@@ -20,6 +17,11 @@ namespace MemoryGame.multiplayer
                 await Task.Delay(new Random().Next(0, 5) * 1000);
                 await _connection.StartAsync();
             };
+
+            _connection.On<string>("ReceiveMessage", (message) =>
+            {
+                Console.WriteLine(message);
+            });
         }
     }
 }

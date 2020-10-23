@@ -56,6 +56,11 @@ namespace MemoryGame
             }
         }
 
+        private void InitializeServerConnection()
+        {
+
+        }
+
         /// <summary>
         /// Handles behaviour for themeselection. Forces one theme to be selected. 
         /// </summary>

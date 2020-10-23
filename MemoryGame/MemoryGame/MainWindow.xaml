@@ -63,9 +63,7 @@
             <TabItem x:Name="TabMultiplayer" Header="Multiplayer" Visibility="Collapsed">
                 <Grid x:Name="MultiplayerGrid">
                     <Grid.RowDefinitions>
-                        <RowDefinition>
-                            
-                        </RowDefinition>
+                        <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>

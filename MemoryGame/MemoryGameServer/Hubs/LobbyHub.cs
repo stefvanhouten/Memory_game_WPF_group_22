@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace MemoryGameServer.Hubs
 {
-    public class SessionHub : Hub
+    public class LobbyHub : Hub
     {
-        public override Task OnConnectedAsync()
+        public async Task SendMessage(string message)
         {
-            Clients.Caller.SendAsync("Connected", Context.ConnectionId);
-            return base.OnConnectedAsync();
+            await Clients.All.SendAsync("ReceiveMessage", message);
         }
     }
 }
