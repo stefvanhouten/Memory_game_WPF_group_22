@@ -1,5 +1,4 @@
-﻿using MemoryGame.multiplayer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -21,10 +20,13 @@ namespace MemoryGame
         {
             InitializeComponent();
             this.game = new Memory(this);
-            this.RenderBackgroundForTabs();
+            this.RenderBackgroundImage();
             this.GenerateThemeSelectionCheckboxes();
         }
 
+        /// <summary>
+        /// Dynamicly creates checkboxes for each available theme in the memory game.
+        /// </summary>
         private void GenerateThemeSelectionCheckboxes()
         {
             int totalChildren = this.ThemeGrid.Children.Count;
@@ -56,11 +58,6 @@ namespace MemoryGame
             }
         }
 
-        private void InitializeServerConnection()
-        {
-
-        }
-
         /// <summary>
         /// Handles behaviour for themeselection. Forces one theme to be selected. 
         /// </summary>
@@ -78,26 +75,28 @@ namespace MemoryGame
             lastChecked = (bool)activeCheckBox.IsChecked ? activeCheckBox : null;
             //Set the currently selected theme
             this.game.SelectedTheme = Convert.ToInt32(activeCheckBox.Name.Substring(1));
-            this.RenderBackgroundForTabs();
+            this.RenderBackgroundImage();
            
             //Re-generate the options that are displayed in the pre game view based on selected theme. 
         }
 
-        private void RenderBackgroundForTabs()
+        /// <summary>
+        /// Updates the application background based on selected theme.
+        /// </summary>
+        private void RenderBackgroundImage()
         {
             ImageBrush background = new ImageBrush()
             {
                 ImageSource = Memory.BitmapToImageSource(this.game.BackgroundTheme[this.game.SelectedTheme]),
                 Opacity = 0.5
             };
-            this.HomeGrid.Background = background;
-            this.ThemeGrid.Background = background;
-            this.MemoryGrid.Background = background;
-            this.PreGameGrid.Background = background;
-            this.HighScoresDataGrid.Background = background;
-            this.MultiplayerGrid.Background = background;
+            this.HomeGrid.Background = this.ThemeGrid.Background = this.MemoryGrid.Background = 
+            this.PreGameGrid.Background = this.HighScoresDataGrid.Background = background;
         }
 
+        /// <summary>
+        /// Displays the loadgame checkbox when a savagame file is available.
+        /// </summary>
         public void ShowLoadGameCheckbox()
         {
             if (this.game.HasUnfinishedGame)
@@ -110,6 +109,9 @@ namespace MemoryGame
             }
         }
 
+        /// <summary>
+        /// Clears the memory grid rows and collumns
+        /// </summary>
         public void ClearPanels()
         {
             this.MemoryGrid.RowDefinitions.Clear();
@@ -151,14 +153,22 @@ namespace MemoryGame
             TabMemoryGame.IsSelected = true;
         }
 
+        /// <summary>
+        /// When the loadgame checkbox is checked starts the process of retrieving gamestate from savefile
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void LoadSavedGame(object sender, EventArgs e)
         {
             this.game.ResumeGame(loadFromSaveFile: true);
-            this.RenderBackgroundForTabs();
+            this.RenderBackgroundImage();
             this.GenerateThemeSelectionCheckboxes();
             TabMemoryGame.IsSelected = true;
         }
 
+        /// <summary>
+        /// Generates the playing field for the memory game based on game settings.
+        /// </summary>
         public void GeneratePlayingField()
         {
             for (int i = 0; i < this.game.Rows; i++)
@@ -201,14 +211,22 @@ namespace MemoryGame
             }
         }
 
+        /// <summary>
+        /// Clean up the application after a game of memory is completed.
+        /// </summary>
         public void CleanupAfterGame()
         {
+            this.NavigateToHighScores();
             this.InputPlayer1.Text = "";
             this.InputPlayer2.Text = "";
-            this.NavigateToHighScores();
             this.ClearPanels();
         }
 
+        /// <summary>
+        /// After each turn update the scoreboard and the current playing player label.
+        /// </summary>
+        /// <param name="playerOne"></param>
+        /// <param name="playerTwo"></param>
         public void UpdateScoreBoardAndCurrentPlayer(Player playerOne, Player playerTwo)
         {
             if(playerOne != null && playerTwo != null)
@@ -220,6 +238,21 @@ namespace MemoryGame
 
         }
 
+        /// <summary>
+        /// Reset the memory game.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void ResetMemory(object sender, RoutedEventArgs e)
+        {
+            this.game.ResetGame();
+        }
+
+        /// <summary>
+        /// Pause or resume memory based on game state.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void PauseResumeMemory(object sender, RoutedEventArgs e)
         {
             if(this.PauseResumeBtn.Content.ToString().Contains("Pause"))
@@ -268,11 +301,21 @@ namespace MemoryGame
             this.game.Collumns = options.Columns;
         }
 
+        /// <summary>
+        /// Navigate to the home screen.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void NavigateHome(object sender, EventArgs e)
         {
             TabHome.IsSelected = true;
         }
 
+        /// <summary>
+        /// Navigate to thje pre game screen, also prepares available selections.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void NavigatePreGame(object sender, EventArgs e)
         {
             this.ShowLoadGameCheckbox();
@@ -280,10 +323,13 @@ namespace MemoryGame
             TabPreGame.IsSelected = true;
         }
 
+        /// <summary>
+        /// Build the highscores table and navigate to the highscores.
+        /// </summary>
         public void NavigateToHighScores()
         {
             ObservableCollection<HighScoreListing> oc = new ObservableCollection<HighScoreListing>();
-            foreach (HighScoreListing item in this.game.HighScores.HighScores)
+            foreach (HighScoreListing item in this.game.HighScores.Limit(15))
             {
                 oc.Add(item);
             }
@@ -291,24 +337,24 @@ namespace MemoryGame
             TabHighScores.IsSelected = true;
         }
 
+        /// <summary>
+        /// Navigate to highscores.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void NavigateHighScores(object sender, EventArgs e)
         {
             this.NavigateToHighScores();
         }
 
+        /// <summary>
+        /// Navigate to theme selection.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void NavigateThemeSelection(object sender, EventArgs e)
         {
             TabThemeSelection.IsSelected = true;
-        }
-
-        public void NavigateMultiplayer(object sender, EventArgs e)
-        {
-            TabMultiplayer.IsSelected = true;
-        }
-
-        private void TabControlNavigator_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 
