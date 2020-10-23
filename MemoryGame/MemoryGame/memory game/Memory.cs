@@ -257,6 +257,11 @@ namespace MemoryGame
         /// </summary>
         public void ResetGame()
         {
+            //If the game is already frozen prevent resetting.
+            if (this.GameIsFrozen)
+            {
+                return;
+            }
             this.GameIsFrozen = true;
             this.Form1.Dispatcher.Invoke(() =>
             {
