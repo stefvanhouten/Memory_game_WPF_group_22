@@ -112,8 +112,14 @@ namespace MemoryGame
              * Decrypt the JSON file
              */
             string moppie = Files.GetStringFromFileContent(this.HighScorespath);
-
-            this.HighScores = JsonConvert.DeserializeObject<List<HighScoreListing>>(moppie);
+            List<HighScoreListing> storedHighScores = JsonConvert.DeserializeObject<List<HighScoreListing>>(moppie);
+            if(storedHighScores != null)
+            {
+                this.HighScores = storedHighScores;
+            }else
+            {
+                this.HighScores = new List<HighScoreListing>();
+            }
 
             return this.HighScores;
         }
