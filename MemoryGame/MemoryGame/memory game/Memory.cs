@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -246,6 +247,9 @@ namespace MemoryGame
         /// </summary>
         public void EndGame()
         {
+            string Results = $"{this.Players[0].Name} : {this.Players[0].ScoreBoard.Score} \n{this.Players[1].Name} : {this.Players[1].ScoreBoard.Score}";
+            string title = "Scores";
+            MessageBox.Show(Results, title);
             this.AddPlayersToHighScore();
             this.Form1.Dispatcher.Invoke(() =>
             {
