@@ -7,7 +7,7 @@ namespace MemoryGame
 {
     public class Sound
     {
-        public static void PlayEffect(byte[] audioResource)
+        public static void StartEffect(byte[] audioResource)
         {
             // Creates WaveStream (inherits from System.IO.Stream), and reads the MP3 file
             WaveStream mainOutputStream = new Mp3FileReader(ByteArrayToStream(audioResource));

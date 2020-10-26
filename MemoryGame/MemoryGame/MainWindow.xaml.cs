@@ -154,6 +154,16 @@ namespace MemoryGame
         }
 
         /// <summary>
+        /// Mute any audio playback if this is checked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void MuteAudio(object sender, EventArgs e)
+        {
+            this.game.AudioIsEnabled = false;
+        }
+
+        /// <summary>
         /// When the loadgame checkbox is checked starts the process of retrieving gamestate from savefile
         /// </summary>
         /// <param name="sender"></param>
