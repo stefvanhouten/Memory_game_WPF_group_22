@@ -163,6 +163,11 @@ namespace MemoryGame
             this.game.AudioIsEnabled = false;
         }
 
+        public void UnmuteAudio(object sender, EventArgs e)
+        {
+            this.game.AudioIsEnabled = true;
+        }
+
         /// <summary>
         /// When the loadgame checkbox is checked starts the process of retrieving gamestate from savefile
         /// </summary>
