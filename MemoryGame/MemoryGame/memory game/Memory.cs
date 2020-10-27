@@ -215,6 +215,7 @@ namespace MemoryGame
         public int SelectedTheme { get; set; }
         public int Rows { get; set; } = 4;
         public int Collumns { get; set; } = 4;
+        public bool AudioIsEnabled { get; set; } = true;
 
 
         public Memory(MainWindow form1)
@@ -238,7 +239,7 @@ namespace MemoryGame
         {
             this.PopulateDeck();
             this.ShuffleDeck();
-            Sound.StartBackgroundMusic(this.SelectedTheme);
+            PlayBackgroundMusic(this.SelectedTheme);
         }
 
         /// <summary>
@@ -405,6 +406,25 @@ namespace MemoryGame
         }
 
         /// <summary>
+        /// Checks whether audio playback is enabled, and plays soundeffects and backgroundmusic accordingly
+        /// </summary>
+        public void PlaySoundEffect(byte[] audiofile)
+        {
+            if (AudioIsEnabled)
+            {
+                Sound.StartEffect(audiofile);
+            }
+        }
+
+        public void PlayBackgroundMusic(int selectedTheme)
+        {
+            if (AudioIsEnabled)
+            {
+                Sound.StartBackgroundMusic(selectedTheme);
+            }
+        }
+
+        /// <summary>
         /// Resumes paused game. If it needs to resume game from savefile load file contents back into the memory class
         /// and rebuild the deck.
         /// </summary>
@@ -525,7 +545,7 @@ namespace MemoryGame
             if (this.Deck.FindAll(c => c.IsSolved == false).Count == 0)
             {
                 Sound.StopBackGroundMusic();
-                Sound.PlayEffect(Resources.trumpets);
+                PlaySoundEffect(Resources.trumpets);
                 this.EndGame();
             }
         }
@@ -542,13 +562,13 @@ namespace MemoryGame
         {
             if (this.SelectedCards[0].PairName == this.SelectedCards[1].PairName)
             {
-                Sound.PlayEffect(Resources.correct);
+                PlaySoundEffect(Resources.correct);
                 this.SetMatchingPairToSolved();
                 this.AwardPlayerWithScore();
             }
             else
             {
-                Sound.PlayEffect(Resources.incorrect);
+                PlaySoundEffect(Resources.incorrect);
                 this.CheckAndHandlePlayerPunish();
                 this.HideFailedMatchCardImage();
             }
