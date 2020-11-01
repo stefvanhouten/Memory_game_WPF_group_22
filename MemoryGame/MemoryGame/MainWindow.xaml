@@ -77,7 +77,7 @@
                     <TextBox x:Name="InputPlayer2" HorizontalAlignment="Left" Height="23" Margin="10,0,0,0" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="center" Width="200"/>
                     <ComboBox x:Name="GameSizeComboBox" DropDownClosed="GameSizeSelection"  HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Column="2" Grid.Row="2" VerticalAlignment="top" Width="120"/>
                     <CheckBox x:Name="LoadSaveGameCheckBox" Content="Load saved game" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="2" Margin="10,0,0,0" VerticalAlignment="center" Click="LoadSavedGame" Background="White"/>
-                    <CheckBox x:Name="MuteAudioCheckBox" Content="Mute soundeffects/music" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="3" Margin="10,0,0,0" VerticalAlignment="center" Checked="MuteAudio" Unchecked="UnmuteAudio" Background="White"/>
+                    <CheckBox x:Name="MuteAudioCheckBox" Content="Mute audio" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="3" Margin="10,0,0,0" VerticalAlignment="center" Checked="MuteAudio" Unchecked="UnmuteAudio" Background="White"/>
                     <Label Content="Audio volume" HorizontalAlignment="Left" Margin="5,75,0,0" Grid.Column="2" Grid.Row="3" VerticalAlignment="Top"  Width="120" Height="26"/>
                     <Slider x:Name="AudioVolumeSlider" HorizontalAlignment="Left" Width="205" Value="1" Maximum="1" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Grid.Column="2" Grid.Row="3" Margin="10,100,0,0" ValueChanged="AudioVolumeSliderChanges"/>
                     <Button x:Name="ButtonStartMemoryGame" Grid.Column="0" Grid.Row="4" Content="Start game" VerticalAlignment="top" Height="30" Click="StartMemoryGame"/>
