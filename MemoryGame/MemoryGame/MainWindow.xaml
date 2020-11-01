@@ -76,7 +76,8 @@
                     <Label Content="Player 2&#xA;" HorizontalAlignment="Left" Margin="5,0,0,0" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top"  Width="120" Height="26"/>
                     <TextBox x:Name="InputPlayer2" HorizontalAlignment="Left" Height="23" Margin="10,0,0,0" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="center" Width="200"/>
                     <ComboBox x:Name="GameSizeComboBox" DropDownClosed="GameSizeSelection"  HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Column="2" Grid.Row="2" VerticalAlignment="top" Width="120"/>
-                    <CheckBox x:Name="LoadSaveGameCheckBox" Content="Load saved game" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="2" Margin="10,0,0,0" VerticalAlignment="center" Click="LoadSavedGame" Background="White"/>
+                    <CheckBox x:Name="MuteAudioCheckBox" Content="Mute soundeffects/music" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="2" Margin="10,0,0,0" VerticalAlignment="center" Checked="MuteAudio" Unchecked="UnmuteAudio" Background="White"/>
+                    <CheckBox x:Name="LoadSaveGameCheckBox" Content="Load saved game" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="2" Margin="10,50,0,0" VerticalAlignment="center" Click="LoadSavedGame" Background="White"/>
                     <Button x:Name="ButtonStartMemoryGame" Grid.Column="0" Grid.Row="4" Content="Start game" VerticalAlignment="top" Height="30" Click="StartMemoryGame"/>
                     <Button x:Name="ButtonHomePreGame" Grid.Column="0" Grid.Row="4" Content="Home" VerticalAlignment="Bottom" Click="NavigateHome" Height="30"/>
                 </Grid>
@@ -96,6 +97,7 @@
                     <Label x:Name="LabelCurrentPlayer" Content="Label" ClipToBounds="False" HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,-6,0,0" />
                     <Grid x:Name="MemoryGrid" Grid.Row="1" Background="#FFE5E5E5"></Grid>
                     <Button x:Name="PauseResumeBtn" Content="Pause" HorizontalAlignment="Left" Grid.Row="2"  VerticalAlignment="Top" Width="75" Click="PauseResumeMemory"/>
+                    <Button x:Name="ResetBtn" Content="Reset" HorizontalAlignment="Right" Grid.Row="2"  VerticalAlignment="Top" Width="75" Click="ResetMemory"/>
                 </Grid>
             </TabItem>
         </TabControl>
