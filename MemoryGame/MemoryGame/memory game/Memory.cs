@@ -371,7 +371,8 @@ namespace MemoryGame
                                                 jsonConvertableDeck,
                                                 this.Rows,
                                                 this.Collumns,
-                                                this.Players);
+                                                this.Players,
+                                                this.AudioIsEnabled);
             return JsonConvert.SerializeObject(gameState, Formatting.Indented);
         }
 
@@ -398,6 +399,7 @@ namespace MemoryGame
             this.Rows = gameState.Rows;
             this.Collumns = gameState.Collumns;
             this.Players = gameState.Players;
+            this.AudioIsEnabled = gameState.AudioEnabled;
 
             //It is important that we style our deck after we loaded in all the settings, otherwise we get a default 4*4 playing field
             //even though the settings may state otherwise

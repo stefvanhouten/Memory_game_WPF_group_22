@@ -1,19 +1,20 @@
-﻿using System.IO;
-using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using MemoryGame.Properties;
 using NAudio.Wave;
 
 namespace MemoryGame
 {
-    public class Sound
+    public static class Sound
     {
         public static void StartEffect(byte[] audioResource)
         {
-            // Creates WaveStream (inherits from System.IO.Stream), and reads the MP3 file
+            // Create WaveStream (inherits from System.IO.Stream), and read the MP3 file
             WaveStream mainOutputStream = new Mp3FileReader(ByteArrayToStream(audioResource));
             WaveChannel32 volumeStream = new WaveChannel32(mainOutputStream);
 
-            // Creates the player
+            // Create the player
             WaveOutEvent player = new WaveOutEvent();
 
             // Add the volumeStream to the player
@@ -27,25 +28,29 @@ namespace MemoryGame
 
         public static void StartBackgroundMusic(int selectedTheme)
         {
+            // Create lists with songs per theme
+            List<byte[]> animalsSongs = new List<byte[]>() { Resources.bangerbeat, Resources.angello };
+            List<byte[]> lotrSongs = new List<byte[]>() { Resources.lotr_main, Resources.lotr_gondor };
+            List<byte[]> starWarsSongs = new List<byte[]>() { Resources.star_wars_main, Resources.star_wars_imperial_march };
+
             // Create an empty Stream
             Stream audioStream = new MemoryStream();
 
-            //Choose audioResource based on theme
+            // Choose audioStream based on theme
             switch (selectedTheme)
             {
+                // Animals theme is selected
                 case 0:
-                    // Animals theme song
-                    audioStream = ByteArrayToStream(Resources.bangerbeat);
+                    audioStream = SelectRandomSong(animalsSongs);
                     break;
+                // LOTR theme is selected
                 case 1:
-                    // LOTR theme song
-                    audioStream = ByteArrayToStream(Resources.lotrtrack);
+                    audioStream = SelectRandomSong(lotrSongs);
                     break;
+                // Starwars theme is selected
                 case 2:
-                    // Starwars theme song
-                    audioStream = ByteArrayToStream(Resources.lotrtrack);
+                    audioStream = SelectRandomSong(starWarsSongs);
                     break;
-
             }
 
             WaveStream mainOutputStream = new Mp3FileReader(audioStream);
@@ -57,11 +62,21 @@ namespace MemoryGame
 
         }
 
+        // Stops current BackgroundPlayer playback
         public static void StopBackGroundMusic()
         {
             BackgroundPlayer.Stop();
         }
 
+        // Selects a random song per theme
+        private static Stream SelectRandomSong(List<byte[]> songs)
+        {
+            Random random = new Random();
+            int selectedIndex = random.Next(songs.Count);
+            return ByteArrayToStream(songs[selectedIndex]);
+        }
+
+        // Converts byte array into MemoryStream for playback with NAudio
         private static Stream ByteArrayToStream(byte[] byteArray)
         {
             // Converts byte[] (MP3 file) to Stream
