@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -172,8 +173,6 @@ namespace MemoryGame
                     new CardNameAndImage() { Name = "x_wing", Resource = Resources.x_wing },
                     new CardNameAndImage() { Name = "yoda", Resource = Resources.yoda },
                     new CardNameAndImage() { Name = "yoda", Resource = Resources.yoda },
-
-
                 }
             },
 
@@ -228,8 +227,17 @@ namespace MemoryGame
 
             //Check if there is a savefile that isn't empty
             Files.Create(this.SaveGamePath);
-            if (Files.GetFileContent(this.SaveGamePath).Length > 0)
-                this.HasUnfinishedGame = true;
+
+            //If reading the file content raises an error this means the data was corrupted. Empty the savegame file and continue.
+            try
+            {
+                if (Files.GetFileContent(this.SaveGamePath).Length > 0)
+                    this.HasUnfinishedGame = true;
+            }
+            catch (Exception)
+            {
+                Files.ClearFile(this.SaveGamePath);
+            }
         }
 
         /// <summary>
@@ -370,9 +378,18 @@ namespace MemoryGame
         /// <summary>
         /// Loads the content from the save file and applies it to the current game.
         /// </summary>
-        private void ApplyStoredGameStateToCurrentGame()
+        private bool ApplyStoredGameStateToCurrentGame()
         {
-            string json = Files.GetFileContent(this.SaveGamePath);
+            string json;
+            try
+            {
+                json = Files.GetFileContent(this.SaveGamePath);
+            }
+            catch (Exception)
+            {
+                Files.ClearFile(this.SaveGamePath);
+                return false;
+            }
             //Deserialize the json
             GameState gameState = JsonConvert.DeserializeObject<GameState>(json);
             //For the next part we need to cast/convert all properties that are stored in our dyanmic list to the appropriate type
@@ -403,6 +420,7 @@ namespace MemoryGame
                 }
                 this.Deck.Add(card);
             }
+            return true;
         }
 
         /// <summary>
@@ -429,12 +447,18 @@ namespace MemoryGame
         /// and rebuild the deck.
         /// </summary>
         /// <param name="loadFromSaveFile"></param>
-        public void ResumeGame(bool loadFromSaveFile = false)
+        public bool ResumeGame(bool loadFromSaveFile = false)
         {
             if (loadFromSaveFile)
             {
                 this.CreateEmptyDeckAndSelectedCardsList();
-                this.ApplyStoredGameStateToCurrentGame();
+                bool isLoaded = this.ApplyStoredGameStateToCurrentGame();
+                if (!isLoaded)
+                {
+                    this.GameIsFrozen = false;
+                    this.HasUnfinishedGame = false;
+                    return false;
+                }
                 this.Form1.Dispatcher.Invoke(() =>
                 {
                     this.Form1.UpdateScoreBoardAndCurrentPlayer(this.Players[0], this.Players[1]);
@@ -446,6 +470,7 @@ namespace MemoryGame
             this.HasUnfinishedGame = false;
             //Pass back control to the player
             this.GameIsFrozen = false;
+            return true;
         }
 
         private void CreateEmptyDeckAndSelectedCardsList()

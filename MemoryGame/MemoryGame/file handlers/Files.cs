@@ -79,6 +79,11 @@ static class Files
         }
     }
 
+    public static void ClearFile(string completePath)
+    {
+        Files.WriteToFile(completePath, new byte[0], true);
+    }
+
     /// <summary>
     /// Returns the content that is stored in the file
     /// </summary>

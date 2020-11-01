@@ -175,10 +175,16 @@ namespace MemoryGame
         /// <param name="e"></param>
         public void LoadSavedGame(object sender, EventArgs e)
         {
-            this.game.ResumeGame(loadFromSaveFile: true);
-            this.RenderBackgroundImage();
-            this.GenerateThemeSelectionCheckboxes();
-            TabMemoryGame.IsSelected = true;
+            bool isLoaded = this.game.ResumeGame(loadFromSaveFile: true);
+            if (!isLoaded)
+            {
+                this.NavigateHome(this, EventArgs.Empty);
+                MessageBox.Show("Savegame file was corrupted!", "Error");
+                return;
+            }
+                this.RenderBackgroundImage();
+                this.GenerateThemeSelectionCheckboxes();
+                TabMemoryGame.IsSelected = true;
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Security;
 using System.Linq;
+using System.Windows;
 
 namespace MemoryGame
 {
@@ -111,13 +112,23 @@ namespace MemoryGame
              * Get the content of the file (highscores)
              * Decrypt the JSON file
              */
-            string moppie = Files.GetStringFromFileContent(this.HighScorespath);
-            List<HighScoreListing> storedHighScores = JsonConvert.DeserializeObject<List<HighScoreListing>>(moppie);
-            if(storedHighScores != null)
+            try
             {
-                this.HighScores = storedHighScores;
-            }else
+                string moppie = Files.GetStringFromFileContent(this.HighScorespath);    
+                List<HighScoreListing> storedHighScores = JsonConvert.DeserializeObject<List<HighScoreListing>>(moppie);
+                if(storedHighScores != null)
+                {
+                    this.HighScores = storedHighScores;
+                }else
+                {
+                    this.HighScores = new List<HighScoreListing>();
+                }
+
+            }
+            catch (Exception)
             {
+                MessageBox.Show("Highscores was corrupted! A new file has been created and all progress has been lost.", "Error");
+                Files.ClearFile(this.HighScorespath);
                 this.HighScores = new List<HighScoreListing>();
             }
 
