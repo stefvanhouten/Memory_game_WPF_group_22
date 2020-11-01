@@ -161,11 +161,22 @@ namespace MemoryGame
         public void MuteAudio(object sender, EventArgs e)
         {
             this.game.AudioIsEnabled = false;
+            this.AudioVolumeSlider.IsEnabled = false;
         }
 
         public void UnmuteAudio(object sender, EventArgs e)
         {
             this.game.AudioIsEnabled = true;
+            this.AudioVolumeSlider.IsEnabled = true;
+        }
+
+        /// <summary>
+        /// Sets the game volume to value selected by volume slider
+        /// </summary>
+        public void AudioVolumeSliderChanges(object sender, EventArgs e)
+        {
+            float volumeValue = (float)AudioVolumeSlider.Value;
+            Sound.BackgroundPlayer.Volume = volumeValue;
         }
 
         /// <summary>

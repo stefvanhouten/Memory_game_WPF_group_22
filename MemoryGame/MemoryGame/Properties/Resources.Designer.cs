@@ -61,6 +61,16 @@ namespace MemoryGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] angello {
+            get {
+                object obj = ResourceManager.GetObject("angello", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap aragorn {
@@ -471,6 +481,26 @@ namespace MemoryGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] lotr_gondor {
+            get {
+                object obj = ResourceManager.GetObject("lotr_gondor", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] lotr_main {
+            get {
+                object obj = ResourceManager.GetObject("lotr_main", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap lotr1 {
@@ -487,16 +517,6 @@ namespace MemoryGame.Properties {
             get {
                 object obj = ResourceManager.GetObject("lotrBackground", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] lotrtrack {
-            get {
-                object obj = ResourceManager.GetObject("lotrtrack", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -771,12 +791,32 @@ namespace MemoryGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] star_wars_imperial_march {
+            get {
+                object obj = ResourceManager.GetObject("star_wars_imperial_march", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap star_wars_logo {
             get {
                 object obj = ResourceManager.GetObject("star_wars_logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] star_wars_main {
+            get {
+                object obj = ResourceManager.GetObject("star_wars_main", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
