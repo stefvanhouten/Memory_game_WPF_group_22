@@ -10,13 +10,15 @@ namespace MemoryGame
         public int Rows { get; private set; }
         public int Collumns { get; private set; }
         public Player[] Players { get; private set; }
+        public bool AudioEnabled { get; private set; }
 
         public GameState(bool isPlayerOnesTurn,
                          int selectedTheme,
                          List<CardPictureBoxJson> deck,
                          int rows,
                          int collumns,
-                         Player[] players)
+                         Player[] players,
+                         bool audioEnabled)
         {
             this.IsPlayerOnesTurn = isPlayerOnesTurn;
             this.SelectedTheme = selectedTheme;
@@ -24,6 +26,7 @@ namespace MemoryGame
             this.Rows = rows;
             this.Collumns = collumns;
             this.Players = players;
+            this.AudioEnabled = audioEnabled;
         }
     }
 }

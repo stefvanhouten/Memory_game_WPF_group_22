@@ -38,12 +38,12 @@ Everyone got assigned a class or multiple classes within the project for which t
 - Stef van Houten
 - - Mainwindow
 - - Memory and most subclasses found in Memory game folder.
+- - Unittests
 
 - Wietze Bronkema
 - - Sound class 
 - - Multiplayer
 - - Data encryption 
-- - Data storage 
 
 - Daniël Safarizadeh
 - - Data encryption
@@ -55,3 +55,38 @@ Everyone got assigned a class or multiple classes within the project for which t
 
 Besides our assigned classes we would take turns in helping Awather, learning him the basics, learning him OOP and assigning him small 
 homework tasks. The homewerk we assigned to him can be found on Trello.
+
+# Game rules
+
+2 player game. Players must submit a name, names can be the same. Game is played in turns, each turn consists out of choosing 2 cards. 
+When both cards match yields x amount of points to the player that played the turn. When there is no match there is an additional check,
+- Have both cards been visible?
+- - If so remove x amount of points from player
+- - If not no points will be taken
+
+# Extra features
+- Sound
+- - Background music
+- - On card match
+- - On no card match
+- - On game end
+- - Mute game button
+- - Audio slider
+
+- Theme selection
+- - Theme music
+- - Card frontside and backside image according to theme
+- - Background according to theme
+
+- Pre-game
+- - Dynamic game size options. The available game sizes are calculated based on the available cards per theme. The basic animal theme has more options than the starwars theme.
+
+- Unittests
+- - There are a few unittests for the main features of the memory game
+
+- Encryption
+- - All data stored in highscores and savegame files are encrypted. 
+- - When data is changed the encryption is rendered useless and the contents in the file are thrown away
+
+
+ 

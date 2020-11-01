@@ -193,9 +193,14 @@ namespace MemoryGame
                 MessageBox.Show("Savegame file was corrupted!", "Error");
                 return;
             }
-                this.RenderBackgroundImage();
-                this.GenerateThemeSelectionCheckboxes();
-                TabMemoryGame.IsSelected = true;
+            this.RenderBackgroundImage();
+            this.GenerateThemeSelectionCheckboxes();
+            TabMemoryGame.IsSelected = true;
+
+            if (this.game.AudioIsEnabled)
+            {
+                Sound.StartBackgroundMusic(this.game.SelectedTheme);
+            }
         }
 
         /// <summary>
